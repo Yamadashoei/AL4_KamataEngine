@@ -1,27 +1,32 @@
-﻿#pragma once
-#include <3d\Camera.h>
-#include <3d\Model.h>
+﻿#include <3d\Camera.h>
 #include <3d\WorldTransform.h>
-#include <base\TextureManager.h>
+#include <input\Input.h>
+#include <3d\Model.h>
 
 class Player {
-public:
+public: // メンバ関数
+	/// <summary>
 	/// 初期化
-	void Initialize(KamataEngine::Model* model, uint32_t textureHandle, KamataEngine::Camera viewProjection);
+	/// </summary>
+	void Initialize(KamataEngine::Model* model, uint32_t textureHandle);
 
-	/// 更新
+	/// <summary>
+	/// 毎フレーム処理
+	/// </summary>
 	void Update();
 
+	/// <summary>
 	/// 描画
-	void Draw(); //
+	/// </summary>
+	void Draw(KamataEngine::Camera& veiwProjection);
 
 private:
-	// ワールド変換データ
+	// ワールドトランスフォーム
 	KamataEngine::WorldTransform worldTransform_;
-	// モデル
+	// 3Dモデル
 	KamataEngine::Model* model_ = nullptr;
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
-	// ビュープロジェクション
-	KamataEngine::Camera* viewProjection_ = nullptr;
+	// キーボード入力
+	KamataEngine::Input* input_ = nullptr;
 };
