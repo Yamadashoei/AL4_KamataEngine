@@ -1,5 +1,5 @@
-#include <KamataEngine.h>
 #include "GameScene.h"
+#include <KamataEngine.h>
 using namespace KamataEngine;
 
 // Windowsアプリでのエントリーポイント (main関数)
@@ -20,7 +20,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// DirectX初期化処理
 	dxCommon = DirectXCommon::GetInstance();
 	dxCommon->Initialize(win);
-
 
 #pragma region 汎用機能初期化
 	// ImGuiの初期化
