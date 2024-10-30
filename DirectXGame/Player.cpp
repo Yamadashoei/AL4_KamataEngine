@@ -61,3 +61,19 @@ void Player::Draw(KamataEngine::Camera& viewProjection) {
 	// 3Dモデルを描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 }
+
+//旋回
+void Player::Rotate() {
+	//回数速さ[ラジアン/frame]
+	const float kRotSpeed = 0.02f;
+	//押した方向で移動ベクトルを変更
+	if (input_->PushKey(DIK_A)) {
+	
+	} else if (input_->PushKey(DIK_D)) {
+	
+	}
+
+
+
+
+}

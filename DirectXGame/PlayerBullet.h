@@ -1,15 +1,16 @@
+#pragma once
 #include <3d\Camera.h>
 #include <3d\Model.h>
 #include <3d\WorldTransform.h>
 #include <base\TextureManager.h>
 #include <input\Input.h>
 
-class Player {
-public: // メンバ関数
+class PlayerBullet {
+public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(KamataEngine::Model* model, uint32_t textureHandle);
+	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position);
 
 	/// <summary>
 	/// 毎フレーム処理
@@ -19,9 +20,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(KamataEngine::Camera& veiwProjection);
-	//旋回
-	void Rotate();
+	void Draw(const KamataEngine::Camera& veiwProjection);
 
 private:
 	// ワールドトランスフォーム
@@ -30,6 +29,4 @@ private:
 	KamataEngine::Model* model_ = nullptr;
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
-	// キーボード入力
-	KamataEngine::Input* input_ = nullptr;
 };
