@@ -1,5 +1,6 @@
 ﻿#include <3d\Camera.h>
 #include <3d\WorldTransform.h>
+#include <base\TextureManager.h>
 #include <input\Input.h>
 #include <3d\Model.h>
 
