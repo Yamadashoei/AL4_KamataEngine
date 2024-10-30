@@ -42,8 +42,17 @@ void Player::Update() {
 	// 定数バッファに転送する
 	worldTransform_.TransferMatrix();
 
+	// 移動限界の座標
+	const float kMoveLimitX = 10.0f;
+	const float kMoveLimitY = 10.0f;
+	// 範囲を超えない処理
+	worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimitX);
+	worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);
+	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
+	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
+
 	// キャラクターの座標を画面表示する処理
-	ImGui::Begin("プレイヤーの移動Debug");
+	ImGui::Begin("playerMove_Debug");
 	ImGui::DragFloat3("x", &worldTransform_.translation_.x, 0.01f);
 	ImGui::End();
 }
