@@ -4,10 +4,15 @@
 #include <base\TextureManager.h>
 #include <input\Input.h>
 #include "PlayerBullet.h"
+#include <list>
 
 
 class Player {
 public: // メンバ関数
+	
+	//デストラクタ
+	~Player();
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -24,8 +29,9 @@ public: // メンバ関数
 	void Draw(KamataEngine::Camera& viewProjection);
 	//旋回 いらないかも
 	void Rotate();
-
+	//発射
 	void Attack();
+
 
 private:
 	// ワールドトランスフォーム
@@ -37,5 +43,5 @@ private:
 	// キーボード入力
 	KamataEngine::Input* input_ = nullptr;
 	// 弾
-	PlayerBullet* bullet_ = nullptr;
+	std::list<PlayerBullet*>bullets_;
 };

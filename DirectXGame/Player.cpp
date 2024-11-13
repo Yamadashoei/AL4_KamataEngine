@@ -4,6 +4,14 @@
 #include <input\Input.h>
 #include <math\MathUtility.h>
 
+Player::~Player() {
+	//bullet解放
+	for (PlayerBullet* bullet : bullets_) {
+		delete bullet;
+	}
+	
+}
+
 void Player::Initialize(KamataEngine::Model* model, uint32_t textureHandle) {
 	// NULLポインタチェック
 	assert(model);
@@ -63,10 +71,9 @@ void Player::Update() {
 	Attack();
 
 	// 弾更新
-	if (bullet_) {
-		bullet_->Update();
+	for (PlayerBullet*bullet:bullets_){
+		bullet->Update();
 	}
-
 
 	// キャラクターの座標を画面表示する処理
 	ImGui::Begin("playerMove_Debug");
@@ -78,22 +85,20 @@ void Player::Draw(KamataEngine::Camera& viewProjection) {
 	// 3Dモデルを描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 	// 弾描画
-	if (bullet_) {
-		bullet_->Draw(viewProjection);
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Draw(viewProjection);
 	}
 }
 
-//旋回
-void Player::Rotate() {
-
-}
+// 旋回
+void Player::Rotate() {}
 
 void Player::Attack() {
 	if (input_->TriggerKey(DIK_SPACE)) {
-		// 弾を生成し、初期化
+		//  弾を生成し、初期化
 		PlayerBullet* newBullet = new PlayerBullet();
 		newBullet->Initialize(model_, worldTransform_.translation_);
 		// 弾を登録する
-		bullet_ = newBullet;
+		bullets_.push_back(newBullet);
 	}
 }
