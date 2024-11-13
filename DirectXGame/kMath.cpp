@@ -183,3 +183,14 @@ KamataEngine::Vector3 Transform(const KamataEngine::Vector3& vector, const Kamat
 
 	return ans;
 }
+
+// 法線ベクトルの変換
+// v :法線ベクトル
+// m :4x4の変換行列
+KamataEngine::Vector3 TransformNormal(const KamataEngine::Vector3& v, const KamataEngine::Matrix4x4& m) {
+	KamataEngine::Vector3 result{
+		v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0],
+		v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1],
+		v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2]};
+	return result;
+}

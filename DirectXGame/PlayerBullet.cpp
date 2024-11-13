@@ -1,7 +1,7 @@
 #include "PlayerBullet.h"
 #include <base\TextureManager.h>
 
-void PlayerBullet::Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position) {
+void PlayerBullet::Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity) {
 	// NULLポインタチェック
 	assert(model);
 
@@ -12,10 +12,18 @@ void PlayerBullet::Initialize(KamataEngine::Model* model, const KamataEngine::Ve
 	worldTransform_.Initialize();
 	//引数で受け取った初期座標をセット
 	worldTransform_.translation_ = position;
-
+	// 引数で受け取った初期座標をセット
+	velocity_ = velocity;
 }
 
 void PlayerBullet::Update() {
+	//座標を移動させる(1フレーム分の移動量を足しこむ)
+	worldTransform_.translation_ += velocity_;
+	//時間経過でデス(弾が消える)
+	if (--deathTimer_ <= 0) {
+		isDead_ = true;
+	}
+
 	// ワールド変換の更新
 	worldTransform_.UpdateMatrix();
 }

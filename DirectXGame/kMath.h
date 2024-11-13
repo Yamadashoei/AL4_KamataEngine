@@ -82,3 +82,8 @@ const KamataEngine::Vector3 operator*(const KamataEngine::Vector3& v, float s);
 // vector: 変換するベクトル
 // matrix: 変換行列
 KamataEngine::Vector3 Transform(const KamataEngine::Vector3& vector, const KamataEngine::Matrix4x4& matrix);
+
+// 法線ベクトルの変換
+// v :法線ベクトル
+// m :4x4の変換行列
+KamataEngine::Vector3 TransformNormal(const KamataEngine::Vector3& v, const KamataEngine::Matrix4x4& m);
