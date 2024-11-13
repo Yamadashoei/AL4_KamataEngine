@@ -4,6 +4,7 @@
 #include <3d\WorldTransform.h>
 #include <base\TextureManager.h>
 #include <input\Input.h>
+#include <cassert>
 
 class PlayerBullet {
 public:
@@ -20,7 +21,7 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(const KamataEngine::Camera& veiwProjection);
+	void Draw(const KamataEngine::Camera& viewProjection);
 
 private:
 	// ワールドトランスフォーム

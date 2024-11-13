@@ -51,6 +51,23 @@ void Player::Update() {
 	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
 
+	// 回数速さ[ラジアン/frame]
+	const float kRotSpeed = 0.02f;
+	// 押した方向で移動ベクトルを変更
+	if (input_->PushKey(DIK_A)) {
+		worldTransform_.rotation_.y -= kRotSpeed;
+	} else if (input_->PushKey(DIK_D)) {
+		worldTransform_.rotation_.y += kRotSpeed;
+	}
+	// キャラクター攻撃処理
+	Attack();
+
+	// 弾更新
+	if (bullet_) {
+		bullet_->Update();
+	}
+
+
 	// キャラクターの座標を画面表示する処理
 	ImGui::Begin("playerMove_Debug");
 	ImGui::DragFloat3("x", &worldTransform_.translation_.x, 0.01f);
@@ -60,20 +77,23 @@ void Player::Update() {
 void Player::Draw(KamataEngine::Camera& viewProjection) {
 	// 3Dモデルを描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+	// 弾描画
+	if (bullet_) {
+		bullet_->Draw(viewProjection);
+	}
 }
 
 //旋回
 void Player::Rotate() {
-	//回数速さ[ラジアン/frame]
-	const float kRotSpeed = 0.02f;
-	//押した方向で移動ベクトルを変更
-	if (input_->PushKey(DIK_A)) {
-	
-	} else if (input_->PushKey(DIK_D)) {
-	
+
+}
+
+void Player::Attack() {
+	if (input_->TriggerKey(DIK_SPACE)) {
+		// 弾を生成し、初期化
+		PlayerBullet* newBullet = new PlayerBullet();
+		newBullet->Initialize(model_, worldTransform_.translation_);
+		// 弾を登録する
+		bullet_ = newBullet;
 	}
-
-
-
-
 }

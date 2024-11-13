@@ -3,6 +3,8 @@
 #include <3d\WorldTransform.h>
 #include <base\TextureManager.h>
 #include <input\Input.h>
+#include "PlayerBullet.h"
+
 
 class Player {
 public: // メンバ関数
@@ -19,9 +21,11 @@ public: // メンバ関数
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(KamataEngine::Camera& veiwProjection);
-	//旋回
+	void Draw(KamataEngine::Camera& viewProjection);
+	//旋回 いらないかも
 	void Rotate();
+
+	void Attack();
 
 private:
 	// ワールドトランスフォーム
@@ -32,4 +36,6 @@ private:
 	uint32_t textureHandle_ = 0u;
 	// キーボード入力
 	KamataEngine::Input* input_ = nullptr;
+	// 弾
+	PlayerBullet* bullet_ = nullptr;
 };
