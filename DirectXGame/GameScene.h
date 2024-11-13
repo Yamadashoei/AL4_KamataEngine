@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Player.h"
+#include "Enemy.h"
 #include <2d\Sprite.h>
 #include <3d\Camera.h>
 #include <3d\DebugCamera.h>
@@ -56,6 +57,8 @@ private: // メンバ変数
 	uint32_t textureHandle_ = 0;
 	// 自キャラ
 	Player* player_ = nullptr;
+	// 敵キャラ
+	Enemy* enemy_ = nullptr;
 
 	// デバッグカメラ有効
 	bool isDebugCameraActive_ = false;

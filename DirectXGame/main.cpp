@@ -2,6 +2,8 @@
 #include <KamataEngine.h>
 using namespace KamataEngine;
 
+//03_06 p7から　p10はやった
+
 // Windowsアプリでのエントリーポイント (main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	WinApp* win = nullptr;
