@@ -42,8 +42,10 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
-	// 3Dモデル
+	// 自キャラ3Dモデル
 	KamataEngine::Model* model_ = nullptr;
+	// 敵キャラ3Dモデル
+	KamataEngine::Model* modelEnemy_ = nullptr;
 	// ワールドトランスフォーム
 	KamataEngine::WorldTransform worldTransform_;
 	// ビュープロジェクション
@@ -53,8 +55,10 @@ private: // メンバ変数
 	KamataEngine::DirectXCommon* dxCommon_ = nullptr;
 	KamataEngine::Input* input_ = nullptr;
 	KamataEngine::Audio* audio_ = nullptr;
-	// テクスチャハンドル
+	// 自キャラのテクスチャハンドル
 	uint32_t textureHandle_ = 0;
+	// 敵キャラのテクスチャハンドル
+	uint32_t textureHandleEnemy_ = 0;
 	// 自キャラ
 	Player* player_ = nullptr;
 	// 敵キャラ
