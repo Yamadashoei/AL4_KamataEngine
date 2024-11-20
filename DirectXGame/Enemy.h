@@ -4,6 +4,7 @@
 #include <3d\WorldTransform.h>
 #include <base\TextureManager.h>
 #include <input\Input.h>
+#include "EnemyBullet.h"
 
 enum class Phase {
 	Approach, // 接近する
@@ -28,6 +29,18 @@ public: // メンバ関数
 	/// </summary>
 	void Draw(KamataEngine::Camera& viewProjection);
 
+	/// <summary>
+	/// 弾発射
+	/// </summary>
+	void Fire();
+	~Enemy();
+
+	// 発射間隔
+	static const int kFireInterval = 60;
+	// 接近フェーズ初期化
+	void Approach();
+
+
 private:
 	// ワールドトランスフォーム
 	KamataEngine::WorldTransform worldTransform_;
@@ -39,5 +52,9 @@ private:
 	Phase phase_ = Phase::Approach;
 	KamataEngine::Vector3 ApproachVelocity = {0.0f, 0.0f, -0.02f};
 	KamataEngine::Vector3 LeaveVelocity = {-0.1f, 0.05f, 0.02f};
+	// 弾
+	std::list<EnemyBullet*> bullets_;
+	// 発射タイマー
+	int32_t fireTimer = 0;
 
 };
