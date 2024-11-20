@@ -14,6 +14,13 @@ KamataEngine::Vector3& operator+=(KamataEngine::Vector3& lhv, const KamataEngine
 	return lhv;
 }
 
+KamataEngine::Vector3& operator-=(KamataEngine::Vector3& lhv, const KamataEngine::Vector3& rhv) {
+	lhv.x -= rhv.x;
+	lhv.y -= rhv.y;
+	lhv.z -= rhv.z;
+	return lhv;
+}
+
 // 2つの行列を掛け算する関数（行列同士の積）
 // matrix1: 行列1
 // matrix2: 行列2

@@ -14,27 +14,16 @@ void Enemy::Initialize(KamataEngine::Model* model, uint32_t textureHandle) {
 
 void Enemy::Update() {
 
-	// 行列を定数バッファに転送
-	worldTransform_.TransferMatrix();
 	// キャラクターの移動ベクトル
-	KamataEngine::Vector3 move = {0, 0, 0};
+	KamataEngine::Vector3 move = {0.0f, 0.0f, 0.02f};
 
 	// キャラクターの移動速さ
 	const float kCharacterSpeed = 0.2f;
 
-	move.z -= kCharacterSpeed;
-	// move.x += kCharacterSpeed;
-	// move.y -= kCharacterSpeed;
-	// move.y += kCharacterSpeed;
-
-	// 座標移動（ベクトルの加算）
-	worldTransform_.translation_ += move;
+	move.x -= kCharacterSpeed;
 
 	// アフィン変換行列の作成
 	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
-
-	// 定数バッファに転送
-	worldTransform_.TransferMatrix();
 
 	const float kMoveLimitX = 34;
 	const float kMoveLimitY = 18;
@@ -46,6 +35,23 @@ void Enemy::Update() {
 
 	// 行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
+
+	// フェーズ処理
+	switch (phase_) {
+	case Phase::Approach:
+	default:
+		// 移動（ベクトルを加算）
+		worldTransform_.translation_ += ApproachVelocity;
+		// 既定の位置に到達したら離脱
+		if (worldTransform_.translation_.z < 0.0f) {
+			phase_ = Phase::Leave;
+		}
+		break;
+	case Phase::Leave:
+		// 移動（ベクトルを加算）
+		worldTransform_.translation_ += LeaveVelocity;
+		break;
+	}
 }
 
 void Enemy::Draw(KamataEngine::Camera& viewProjection) {

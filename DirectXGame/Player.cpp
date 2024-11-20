@@ -35,7 +35,7 @@ void Player::Update() {
 	});
 
 	// キャラクターの移動ベクトル
-	KamataEngine::Vector3 move = {0, 0, 0};
+	KamataEngine::Vector3 move = {0.0f, 0.0f, 0.0f};
 	// キャラクターの移動速さ
 	const float kCharacterSpeed = 0.2f;
 

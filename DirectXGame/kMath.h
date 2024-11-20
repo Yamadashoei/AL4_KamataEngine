@@ -63,20 +63,39 @@ KamataEngine::Vector3 Lerp(const KamataEngine::Vector3& v1, const KamataEngine::
 // rhv: 右辺のベクトル
 KamataEngine::Vector3& operator+=(KamataEngine::Vector3& lhs, const KamataEngine::Vector3& rhv);
 
+// Vector3同士の引き算の演算子オーバーロード
+// lhs: 左辺のベクトル
+// rhv: 右辺のベクトル
+KamataEngine::Vector3& operator-=(KamataEngine::Vector3& lhv, const KamataEngine::Vector3& rhv);
+
 // Vector3同士の足し算
 // v1: 左辺のベクトル
 // v2: 右辺のベクトル
 const KamataEngine::Vector3 operator+(const KamataEngine::Vector3& v1, const KamataEngine::Vector3& v2);
+
+// Vector3同士の引き算
+// v1: 左辺のベクトル
+// v2: 右辺のベクトル
+const KamataEngine::Vector3 operator-(const KamataEngine::Vector3& v1, const KamataEngine::Vector3& v2);
 
 // Vector3のスカラー掛け算の演算子オーバーロード
 // v: ベクトル
 // s: スカラー（倍する値）
 KamataEngine::Vector3& operator*=(KamataEngine::Vector3 v, float s);
 
+// Vector3のスカラー割り算の演算子オーバーロード
+// v: ベクトル
+// s: スカラー（倍する値）
+
+
 // Vector3のスカラー掛け算
 // v: ベクトル
 // s: スカラー（倍する値）
 const KamataEngine::Vector3 operator*(const KamataEngine::Vector3& v, float s);
+
+// Vector3のスカラー割り算
+// v: ベクトル
+// s: スカラー（倍する値）
 
 // ベクトルに行列を掛けて変換する関数
 // vector: 変換するベクトル
