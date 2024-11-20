@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "Player.h"
 #include "kMath.h"
 #include <cassert>
 
@@ -7,7 +8,6 @@ Enemy::~Enemy() {
 	for (EnemyBullet* bullet : bullets_) {
 		delete bullet;
 	}
-
 }
 void Enemy::Initialize(KamataEngine::Model* model, uint32_t textureHandle) {
 	// NULLポインタチェック
@@ -91,15 +91,25 @@ void Enemy::Draw(KamataEngine::Camera& viewProjection) {
 
 // 発射
 void Enemy::Fire() {
-	// 自キャラの座標をコピー
-	// DirectX::XMFLOAT3 position = worldTransform_.translation_;
+	assert(player_);
 
-	// 弾の速度
+	// 弾の速度(調整項目)
 	const float kBulletSpeed = 1.0f;
-	KamataEngine::Vector3 velocity(0, 0, -kBulletSpeed);
 
-	// 速度ベクトルを自機の向きに合わせて回転させる
-	velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+	// 自キャラの座標を取得する
+	KamataEngine::Vector3 playerWorldPos = GetWorldPosition();
+	// 敵キャラの座標を取得する
+	KamataEngine::Vector3 enemyWorldPos = GetWorldPosition();
+	// 敵キャラから自キャラへの差分ベクトルを求める
+	KamataEngine::Vector3 BulletWorldPos = playerWorldPos - enemyWorldPos;
+	// ベクトルの正規化
+	BulletWorldPos = KamataEngine::MathUtility::Normalize(BulletWorldPos);
+	// ベクトルの長さを速さに合わせる
+	KamataEngine::Vector3 velocity = BulletWorldPos * kBulletSpeed;
+
+	// KamataEngine::Vector3 velocity(0, 0, kBulletSpeed);
+	//  速度ベクトルを自機の向きに合わせて回転させる
+	// velocity = TransformNormal(velocity, worldTransform_.matWorld_);
 
 	// 弾を生成し、初期化
 	EnemyBullet* newBullet = new EnemyBullet();
@@ -118,4 +128,14 @@ void Enemy::Approach() {
 		// 発射タイマー
 		fireTimer = 0;
 	}
+}
+
+KamataEngine::Vector3 Enemy::GetWorldPosition() {
+	/// ワールド座標を入れる変数
+	KamataEngine::Vector3 worldPos;
+	// ワールド行列の平行移動成分を取得(ワールド座標)
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+	return worldPos;
 }

@@ -4,6 +4,8 @@
 #include <input\Input.h>
 #include <math\MathUtility.h>
 
+using namespace KamataEngine;
+
 Player::~Player() {
 	// bullet解放
 	for (PlayerBullet* bullet : bullets_) {
@@ -116,4 +118,15 @@ void Player::Attack() {
 		// 弾を登録する
 		bullets_.push_back(newBullet);
 	}
+}
+
+
+Vector3 Player::GetWorldPosition() {
+	/// ワールド座標を入れる変数
+	Vector3 worldPos;
+	// ワールド行列の平行移動成分を取得(ワールド座標)
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+	return worldPos;
 }

@@ -47,5 +47,4 @@ private:
 	//デスフラグ
 	bool isDead_ = false;
 
-
 };

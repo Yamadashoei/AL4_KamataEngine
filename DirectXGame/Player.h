@@ -32,6 +32,8 @@ public: // メンバ関数
 	//発射
 	void Attack();
 
+	// ワールド座標を取得
+	Vector3 GetWorldPosition();
 
 private:
 	// ワールドトランスフォーム

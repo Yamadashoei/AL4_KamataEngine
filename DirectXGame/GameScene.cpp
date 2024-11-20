@@ -19,13 +19,16 @@ void GameScene::Initialize() {
 	dxCommon_ = KamataEngine::DirectXCommon::GetInstance();
 	input_ = KamataEngine::Input::GetInstance();
 	audio_ = KamataEngine::Audio::GetInstance();
+
 	//自キャラのテクスチャ
 	textureHandle_ = KamataEngine::TextureManager::Load("panda.jpg ");
 	//敵キャラのテクスチャ
 	textureHandleEnemy_ = KamataEngine::TextureManager::Load("wasi.jpg ");
+	
 	// 3Dモデルの生成
 	model_ = KamataEngine::Model::Create();
 	modelEnemy_ = KamataEngine::Model::Create();
+	
 	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 	// ビュープロジェクションの初期化
@@ -41,6 +44,8 @@ void GameScene::Initialize() {
 	// 敵キャラの初期化
 	enemy_->Initialize(modelEnemy_, textureHandleEnemy_);
 
+	// 敵キャラに自キャラのアドレスを渡す
+	enemy_->SetPlayer(player_);
 	// デバッグカメラの生成
 	debugCamera_ = new KamataEngine::DebugCamera(KamataEngine::WinApp::kWindowWidth, KamataEngine::WinApp::kWindowHeight);
 
@@ -55,6 +60,7 @@ void GameScene::Update() {
 	player_->Update();
 	//敵キャラの更新
 	enemy_->Update();
+
 	// デバッグカメラの更新
 	debugCamera_->Update();
 	// デバッグカメラの切り替え処理
