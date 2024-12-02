@@ -154,6 +154,11 @@ const KamataEngine::Vector3 operator+(const KamataEngine::Vector3& v1, const Kam
 	return temp += v2;
 }
 
+const KamataEngine::Vector3 operator-(const KamataEngine::Vector3& v1, const KamataEngine::Vector3& v2) {
+	KamataEngine::Vector3 temp(v1);
+	return temp -= v2;
+}
+
 // 代入演算子オーバーロード
 // Vector3のスカラー掛け算
 // v: ベクトル

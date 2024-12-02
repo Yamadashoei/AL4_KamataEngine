@@ -3,12 +3,25 @@
 #include "kMath.h"
 #include <cassert>
 
+using namespace KamataEngine;
+
 Enemy::~Enemy() {
 	// bullet解放
 	for (EnemyBullet* bullet : bullets_) {
 		delete bullet;
 	}
 }
+
+KamataEngine::Vector3 Enemy::GetWorldPosition() {
+	/// ワールド座標を入れる変数
+	KamataEngine::Vector3 worldPos;
+	// ワールド行列の平行移動成分を取得(ワールド座標)
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+	return worldPos;
+}
+
 void Enemy::Initialize(KamataEngine::Model* model, uint32_t textureHandle) {
 	// NULLポインタチェック
 	assert(model);
@@ -97,7 +110,7 @@ void Enemy::Fire() {
 	const float kBulletSpeed = 1.0f;
 
 	// 自キャラの座標を取得する
-	KamataEngine::Vector3 playerWorldPos = GetWorldPosition();
+	KamataEngine::Vector3 playerWorldPos = player_->GetWorldPosition();
 	// 敵キャラの座標を取得する
 	KamataEngine::Vector3 enemyWorldPos = GetWorldPosition();
 	// 敵キャラから自キャラへの差分ベクトルを求める
@@ -130,12 +143,3 @@ void Enemy::Approach() {
 	}
 }
 
-KamataEngine::Vector3 Enemy::GetWorldPosition() {
-	/// ワールド座標を入れる変数
-	KamataEngine::Vector3 worldPos;
-	// ワールド行列の平行移動成分を取得(ワールド座標)
-	worldPos.x = worldTransform_.translation_.x;
-	worldPos.y = worldTransform_.translation_.y;
-	worldPos.z = worldTransform_.translation_.z;
-	return worldPos;
-}

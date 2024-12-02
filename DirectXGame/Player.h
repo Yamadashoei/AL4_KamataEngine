@@ -33,7 +33,8 @@ public: // メンバ関数
 	void Attack();
 
 	// ワールド座標を取得
-	Vector3 GetWorldPosition();
+	KamataEngine::Vector3 GetWorldPosition();
+
 
 private:
 	// ワールドトランスフォーム
@@ -46,4 +47,6 @@ private:
 	KamataEngine::Input* input_ = nullptr;
 	// 弾
 	std::list<PlayerBullet*>bullets_;
+
+
 };
