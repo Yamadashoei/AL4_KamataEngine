@@ -41,9 +41,15 @@ public: // メンバ関数
 	static const int kFireInterval = 60;
 	// 接近フェーズ初期化
 	void Approach();
-
 	void SetPlayer(Player* player) { player_ = player; }
+	// 衝突を検出したら呼び出されるコールバック関数
+	void OnCollision();
+
 	KamataEngine::Vector3 GetWorldPosition();
+	// 弾リストを取得
+	const std::list<EnemyBullet*>& GetBullets() const { return bullets_; }
+
+
 
 private:
 	// ワールドトランスフォーム

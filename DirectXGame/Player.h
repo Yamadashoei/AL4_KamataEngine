@@ -31,9 +31,13 @@ public: // メンバ関数
 	void Rotate();
 	//発射
 	void Attack();
+	// 衝突を検出したら呼び出されるコールバック関数
+	void OnCollision();
 
 	// ワールド座標を取得
 	KamataEngine::Vector3 GetWorldPosition();
+	// 弾リストを取得
+	const std::list<PlayerBullet*>& GetBullets() const { return bullets_; }
 
 
 private:

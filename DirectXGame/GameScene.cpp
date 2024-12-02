@@ -20,15 +20,15 @@ void GameScene::Initialize() {
 	input_ = KamataEngine::Input::GetInstance();
 	audio_ = KamataEngine::Audio::GetInstance();
 
-	//自キャラのテクスチャ
+	// 自キャラのテクスチャ
 	textureHandle_ = KamataEngine::TextureManager::Load("panda.jpg ");
-	//敵キャラのテクスチャ
+	// 敵キャラのテクスチャ
 	textureHandleEnemy_ = KamataEngine::TextureManager::Load("wasi.jpg ");
-	
+
 	// 3Dモデルの生成
 	model_ = KamataEngine::Model::Create();
 	modelEnemy_ = KamataEngine::Model::Create();
-	
+
 	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 	// ビュープロジェクションの初期化
@@ -49,16 +49,16 @@ void GameScene::Initialize() {
 	// デバッグカメラの生成
 	debugCamera_ = new KamataEngine::DebugCamera(KamataEngine::WinApp::kWindowWidth, KamataEngine::WinApp::kWindowHeight);
 
-	//軸方向表示の表示を有効にする
+	// 軸方向表示の表示を有効にする
 	KamataEngine::AxisIndicator::GetInstance()->SetVisible(true);
-	//軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
+	// 軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
 	KamataEngine::AxisIndicator::GetInstance()->SetTargetCamera(&viewProjection_);
 }
 
 void GameScene::Update() {
 	// 自キャラの更新
 	player_->Update();
-	//敵キャラの更新
+	// 敵キャラの更新
 	enemy_->Update();
 
 	// デバッグカメラの更新
@@ -131,5 +131,67 @@ void GameScene::Draw() {
 	// スプライト描画後処理
 	KamataEngine::Sprite::PostDraw();
 
+#pragma endregion
+}
+
+// 当たり判定　再確認
+void GameScene::CheckAllCollisions() {
+	// 判定対象AとBの座標
+	Vector3 posA, posB;
+
+	// 自弾リストの取得
+	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
+	// 敵弾リストの取得
+	const std::list<EnemyBullet*> enemyBullets = enemy_->GetBullets();
+
+#pragma region 自キャラと敵弾の当たり判定
+	// 自キャラの座標
+	posA = player_->GetWorldPosition();
+	// 自キャラと敵弾全ての当たり判定
+	for (EnemyBullet* bullet : enemyBullets) {
+		// 敵弾の座標
+		posB = bullet->GetWorldPosition();
+		// 座標AとBの距離を求める
+		// 自キャラと敵弾の距離の二乗を求める
+		float dist = pow((posB.x - posA.x), 2.0f) + pow((posB.y - posA.y), 2.0f) + pow((posB.z - posA.z), 2.0f);
+		// 衝突判定距離の二乗
+		float len = pow((1.0f + 1.0f), 2.0f);
+
+		// 自キャラと敵弾の衝突判定
+		if (dist <= len) {
+			// 自キャラの衝突時コールバックを呼び出す
+			player_->OnCollision();
+			// 敵弾の衝突時コールバックを呼び出す
+			bullet->OnCollision();
+		}
+	}
+#pragma endregion
+
+#pragma region 自弾と敵キャラの当たり判定
+	// 敵キャラの座標
+	posA = enemy_->GetWorldPosition();
+
+	// 敵キャラと自弾全ての当たり判定
+	for (PlayerBullet* bullet : playerBullets) {
+		// 自弾の座標
+		posB = bullet->GetWorldPosition();
+
+		// 座標AとBの距離を求める
+		// 自キャラと敵弾の距離の二乗を求める
+		float dist = pow((posB.x - posA.x), 2.0f) + pow((posB.y - posA.y), 2.0f) + pow((posB.z - posA.z), 2.0f);
+		// 衝突判定距離の二乗
+		float len = pow((1.0f + 1.0f), 2.0f);
+
+		// 弾と弾の交差
+		if (dist <= len) {
+			// 敵キャラの衝突コールバックを呼び出す
+			enemy_->OnCollision();
+			// 自弾の衝突コールバックを呼び出す
+			bullet->OnCollision();
+		}
+	}
+#pragma endregion
+
+#pragma region 自弾と敵弾の当たり判定
 #pragma endregion
 }

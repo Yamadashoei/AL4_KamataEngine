@@ -34,3 +34,16 @@ void EnemyBullet::Update() {
 void EnemyBullet::Draw(const KamataEngine::Camera& viewProjection) { 
 	model_->Draw(worldTransform_, viewProjection, textureHandle_); 
 }
+
+void EnemyBullet::OnCollision() { isDead_ = true; }
+
+KamataEngine::Vector3 EnemyBullet::GetWorldPosition() { 
+	// ワールド座標を入れる変数
+	Vector3 worldPos;
+	// ワールド座標の平行同成分を取得
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return worldPos;
+}

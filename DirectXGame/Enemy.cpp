@@ -12,6 +12,8 @@ Enemy::~Enemy() {
 	}
 }
 
+void Enemy::OnCollision() {}
+
 KamataEngine::Vector3 Enemy::GetWorldPosition() {
 	/// ワールド座標を入れる変数
 	KamataEngine::Vector3 worldPos;

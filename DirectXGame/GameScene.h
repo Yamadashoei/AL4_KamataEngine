@@ -2,6 +2,9 @@
 
 #include "Player.h"
 #include "Enemy.h"
+#include "PlayerBullet.h"
+#include "EnemyBullet.h"
+
 #include <2d\Sprite.h>
 #include <3d\Camera.h>
 #include <3d\DebugCamera.h>
@@ -42,6 +45,11 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// 衝突判定と応答
+	/// </summary>
+	void CheckAllCollisions();
+
 	// 自キャラ3Dモデル
 	KamataEngine::Model* model_ = nullptr;
 	// 敵キャラ3Dモデル
@@ -69,7 +77,9 @@ private: // メンバ変数
 	// デバッグカメラ
 	KamataEngine::DebugCamera* debugCamera_ = nullptr;
 
-	/// <summary>
-	/// ゲームシーン用
-	/// </summary>
+	// 自弾
+	std::list<PlayerBullet*> playerBullets_;
+	// 敵弾
+	std::list<EnemyBullet*> enemyBullets_;
+
 };
