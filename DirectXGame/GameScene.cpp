@@ -60,9 +60,10 @@ void GameScene::Update() {
 	player_->Update();
 	// 敵キャラの更新
 	enemy_->Update();
-
 	// デバッグカメラの更新
 	debugCamera_->Update();
+	CheckAllCollisions();
+
 	// デバッグカメラの切り替え処理
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_0)) {
@@ -81,7 +82,7 @@ void GameScene::Update() {
 		// ビュープロジェクション行列の更新と転送
 		viewProjection_.UpdateMatrix();
 	}
-	//
+
 }
 
 void GameScene::Draw() {
@@ -193,5 +194,37 @@ void GameScene::CheckAllCollisions() {
 #pragma endregion
 
 #pragma region 自弾と敵弾の当たり判定
+	for (PlayerBullet* playerBullet : playerBullets) {
+		// 自弾の座標
+		posA = playerBullet->GetWorldPosition();
+		for (EnemyBullet* enemyBullet : enemyBullets) {
+			// 敵弾の座標
+			posB = enemyBullet->GetWorldPosition();
+
+			// 座標AとBの距離を求める
+			// 自キャラと敵弾の距離の二乗を求める
+			float dist = pow((posB.x - posA.x), 2.0f) + pow((posB.y - posA.y), 2.0f) + pow((posB.z - posA.z), 2.0f);
+			// 衝突判定距離の二乗
+			float len = pow((1.0f + 1.0f), 2.0f);
+
+			// 弾と弾の交差
+			if (dist <= len) {
+				// 自弾の衝突コールバックを呼び出す
+				playerBullet->OnCollision();
+				// 敵弾の衝突コールバックを呼び出す
+				enemyBullet->OnCollision();
+			}
+		}
+	}
 #pragma endregion
 }
+
+//void GameScene::AddPlayerBullet(PlayerBullet* playerBullet) {
+//	// リストに登録する
+//	playerBullets_.push_back(playerBullet);
+//}
+//
+//void GameScene::AddEnemyBullet(EnemyBullet* enemyBullet) {
+//	// リストに登録する
+//	enemyBullets_.push_back(enemyBullet);
+//}

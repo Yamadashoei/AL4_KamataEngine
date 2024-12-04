@@ -7,6 +7,9 @@
 #include <list>
 
 
+class PlayerBullet;
+class GameScene;
+
 class Player {
 public: // メンバ関数
 	

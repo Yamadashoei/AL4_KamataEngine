@@ -71,8 +71,8 @@ void Player::Update() {
 	worldTransform_.TransferMatrix();
 
 	// 移動限界の座標
-	const float kMoveLimitX = 10.0f;
-	const float kMoveLimitY = 10.0f;
+	const float kMoveLimitX = 30.0f;
+	const float kMoveLimitY = 30.0f;
 	// 範囲を超えない処理
 	worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimitX);
 	worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);

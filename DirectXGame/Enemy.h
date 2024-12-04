@@ -11,7 +11,9 @@ enum class Phase {
 	Leave,    // 離脱する
 };
 
+class EnemyBullet;
 class Player;
+class GameScene;
 
 class Enemy {
 public: // メンバ関数
@@ -66,6 +68,8 @@ private:
 	std::list<EnemyBullet*> bullets_;
 	// 発射タイマー
 	int32_t fireTimer = 0;
+	//ゲームシーン
+	GameScene* gameScene_ = nullptr;
 	// 自キャラ
 	Player* player_ = nullptr;
 };

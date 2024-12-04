@@ -12,8 +12,6 @@ Enemy::~Enemy() {
 	}
 }
 
-void Enemy::OnCollision() {}
-
 KamataEngine::Vector3 Enemy::GetWorldPosition() {
 	/// ワールド座標を入れる変数
 	KamataEngine::Vector3 worldPos;
@@ -122,10 +120,6 @@ void Enemy::Fire() {
 	// ベクトルの長さを速さに合わせる
 	KamataEngine::Vector3 velocity = BulletWorldPos * kBulletSpeed;
 
-	// KamataEngine::Vector3 velocity(0, 0, kBulletSpeed);
-	//  速度ベクトルを自機の向きに合わせて回転させる
-	// velocity = TransformNormal(velocity, worldTransform_.matWorld_);
-
 	// 弾を生成し、初期化
 	EnemyBullet* newBullet = new EnemyBullet();
 	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
@@ -145,3 +139,5 @@ void Enemy::Approach() {
 	}
 }
 
+//衝突判定
+void Enemy::OnCollision() { return; }

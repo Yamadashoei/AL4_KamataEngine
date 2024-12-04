@@ -50,6 +50,18 @@ public: // メンバ関数
 	/// </summary>
 	void CheckAllCollisions();
 
+	/// <summary>
+	/// 自弾を追加する
+	/// </summary>
+	/// <param name="playerBullet">自弾</param>
+	//void AddPlayerBullet(PlayerBullet* playerBullet);
+
+	/// <summary>
+	/// 敵弾を追加する
+	/// </summary>
+	/// <param name="enemyBullet">敵弾</param>
+	//void AddEnemyBullet(EnemyBullet* enemyBullet);
+
 	// 自キャラ3Dモデル
 	KamataEngine::Model* model_ = nullptr;
 	// 敵キャラ3Dモデル
