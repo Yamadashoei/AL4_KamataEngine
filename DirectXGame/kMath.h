@@ -68,6 +68,10 @@ KamataEngine::Vector3& operator+=(KamataEngine::Vector3& lhs, const KamataEngine
 // rhv: 右辺のベクトル
 KamataEngine::Vector3& operator-=(KamataEngine::Vector3& lhv, const KamataEngine::Vector3& rhv);
 
+KamataEngine::Vector3& operator*=(KamataEngine::Vector3& lhs, const KamataEngine::Vector3& rhv);
+
+KamataEngine::Matrix4x4& operator*=(KamataEngine::Matrix4x4& hls, const KamataEngine::Matrix4x4& rhv);
+
 // Vector3同士の足し算
 // v1: 左辺のベクトル
 // v2: 右辺のベクトル

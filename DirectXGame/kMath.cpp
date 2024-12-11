@@ -21,6 +21,24 @@ KamataEngine::Vector3& operator-=(KamataEngine::Vector3& lhv, const KamataEngine
 	return lhv;
 }
 
+//掛け算仮
+KamataEngine::Vector3& operator*=(KamataEngine::Vector3& lhv, const KamataEngine::Vector3& rhv) {
+	lhv.x *= rhv.x;
+	lhv.y *= rhv.y;
+	lhv.z *= rhv.z;
+	return lhv;
+}
+
+//掛け算仮
+KamataEngine::Matrix4x4& operator*=(KamataEngine::Matrix4x4& lhv, const KamataEngine::Matrix4x4& rhv) {
+	for (uint32_t i = 0; i < 4; i++) {
+		for (uint32_t j = 0; j < 4; j++) {
+			lhv.m[i][j] *= rhv.m[j][i];
+		}
+	}
+	return lhv;
+}
+
 // 2つの行列を掛け算する関数（行列同士の積）
 // matrix1: 行列1
 // matrix2: 行列2

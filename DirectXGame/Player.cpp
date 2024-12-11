@@ -67,10 +67,7 @@ void Player::Update() {
 	}
 	// 座標移動（ベクトルの加算）
 	worldTransform_.translation_ += move;
-	// アフィン変換の行列の作成
-	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
-	// 定数バッファに転送する
-	worldTransform_.TransferMatrix();
+
 
 	// 移動限界の座標
 	const float kMoveLimitX = 30.0f;
@@ -89,6 +86,13 @@ void Player::Update() {
 	} else if (input_->PushKey(DIK_D)) {
 		worldTransform_.rotation_.y += kRotSpeed;
 	}
+
+		// アフィン変換の行列の作成
+	//worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+	worldTransform_.UpdateMatrix();
+	
+	// 定数バッファに転送する
+	//worldTransform_.TransferMatrix();
 	// キャラクター攻撃処理
 	Attack();
 

@@ -80,6 +80,8 @@ void GameScene::Update() {
 	CheckAllCollisions();
 	// スカイドームの更新
 	skyDome_->Update();
+	// レールカメラ
+	railCamera_->Update();
 
 	// デバッグカメラの切り替え処理
 #ifdef _DEBUG
@@ -99,6 +101,10 @@ void GameScene::Update() {
 		// ビュープロジェクション行列の更新と転送
 		viewProjection_.UpdateMatrix();
 	}
+
+	viewProjection_.matView = railCamera_->GetCamera().matView;
+	viewProjection_.matProjection = railCamera_->GetCamera().matProjection;
+	viewProjection_.TransferMatrix();
 }
 
 void GameScene::Draw() {
