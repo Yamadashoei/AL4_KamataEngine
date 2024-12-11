@@ -4,6 +4,7 @@
 #include "Enemy.h"
 #include "PlayerBullet.h"
 #include "EnemyBullet.h"
+#include "skydome.h"
 
 #include <2d\Sprite.h>
 #include <3d\Camera.h>
@@ -83,6 +84,10 @@ private: // メンバ変数
 	Player* player_ = nullptr;
 	// 敵キャラ
 	Enemy* enemy_ = nullptr;
+	// 天球
+	skydome* skyDome_ = nullptr;
+	KamataEngine::Model* modelSkyDome_ = nullptr;
+	uint32_t textureHandleSkyDome_ = 0u;
 
 	// デバッグカメラ有効
 	bool isDebugCameraActive_ = false;

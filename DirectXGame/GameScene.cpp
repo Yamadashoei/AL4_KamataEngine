@@ -12,6 +12,9 @@ GameScene::~GameScene() {
 	delete player_;
 	delete enemy_;
 	delete debugCamera_;
+
+	delete modelSkyDome_;
+	delete skyDome_;
 }
 
 void GameScene::Initialize() {
@@ -49,6 +52,12 @@ void GameScene::Initialize() {
 	// デバッグカメラの生成
 	debugCamera_ = new KamataEngine::DebugCamera(KamataEngine::WinApp::kWindowWidth, KamataEngine::WinApp::kWindowHeight);
 
+	// スカイドーム
+	modelSkyDome_ = Model::CreateFromOBJ("SkyDome", true);
+	textureHandleSkyDome_ = TextureManager::Load("./Resources/SkyDome/sky_sphere.png");
+	skyDome_ = new skydome();
+	skyDome_->Initialize(modelSkyDome_, textureHandleSkyDome_, &viewProjection_);
+
 	// 軸方向表示の表示を有効にする
 	KamataEngine::AxisIndicator::GetInstance()->SetVisible(true);
 	// 軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
@@ -63,6 +72,8 @@ void GameScene::Update() {
 	// デバッグカメラの更新
 	debugCamera_->Update();
 	CheckAllCollisions();
+	// スカイドームの更新
+	skyDome_->Update();
 
 	// デバッグカメラの切り替え処理
 #ifdef _DEBUG
@@ -82,7 +93,6 @@ void GameScene::Update() {
 		// ビュープロジェクション行列の更新と転送
 		viewProjection_.UpdateMatrix();
 	}
-
 }
 
 void GameScene::Draw() {
@@ -112,6 +122,8 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
+	// スカイドームの描画
+	skyDome_->Draw(viewProjection_);
 	// 自キャラの描画
 	player_->Draw(viewProjection_);
 	// 敵キャラの描画
@@ -219,12 +231,12 @@ void GameScene::CheckAllCollisions() {
 #pragma endregion
 }
 
-//void GameScene::AddPlayerBullet(PlayerBullet* playerBullet) {
+// void GameScene::AddPlayerBullet(PlayerBullet* playerBullet) {
 //	// リストに登録する
 //	playerBullets_.push_back(playerBullet);
-//}
+// }
 //
-//void GameScene::AddEnemyBullet(EnemyBullet* enemyBullet) {
+// void GameScene::AddEnemyBullet(EnemyBullet* enemyBullet) {
 //	// リストに登録する
 //	enemyBullets_.push_back(enemyBullet);
-//}
+// }
