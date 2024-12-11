@@ -40,12 +40,18 @@ void GameScene::Initialize() {
 	// 自キャラの生成
 	player_ = new Player();
 	// 自キャラの初期化
-	player_->Initialize(model_, textureHandle_);
+	player_->Initialize(model_, textureHandle_, Vector3{-4.0f, -4.0f, 0.0f});
+
+	// レールカメラ
+	railCamera_ = new RailCamera();
+	railCamera_->Initialize(player_->GetWorldTransform());
+	// 自キャラとレールカメラの親子関係を結ぶ
+	player_->SetParent(&railCamera_->GetWorldTransform());
 
 	// 敵キャラの生成
 	enemy_ = new Enemy();
 	// 敵キャラの初期化
-	enemy_->Initialize(modelEnemy_, textureHandleEnemy_);
+	enemy_->Initialize(modelEnemy_, textureHandleEnemy_, Vector3{6.0f, 3.0f, 10.0f});
 
 	// 敵キャラに自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_);

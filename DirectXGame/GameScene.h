@@ -5,6 +5,7 @@
 #include "PlayerBullet.h"
 #include "EnemyBullet.h"
 #include "skydome.h"
+#include "RailCamera.h"
 
 #include <2d\Sprite.h>
 #include <3d\Camera.h>
@@ -88,6 +89,9 @@ private: // メンバ変数
 	skydome* skyDome_ = nullptr;
 	KamataEngine::Model* modelSkyDome_ = nullptr;
 	uint32_t textureHandleSkyDome_ = 0u;
+
+	// レールカメラ
+	RailCamera* railCamera_ = nullptr;
 
 	// デバッグカメラ有効
 	bool isDebugCameraActive_ = false;

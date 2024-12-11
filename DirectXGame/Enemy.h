@@ -22,7 +22,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(KamataEngine::Model* model, uint32_t textureHandle);
+	void Initialize(KamataEngine::Model* model, uint32_t textureHandle, const KamataEngine::Vector3& position);
 
 	/// <summary>
 	/// 毎フレーム処理

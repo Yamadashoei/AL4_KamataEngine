@@ -106,3 +106,7 @@ KamataEngine::Vector3 Transform(const KamataEngine::Vector3& vector, const Kamat
 // v :法線ベクトル
 // m :4x4の変換行列
 KamataEngine::Vector3 TransformNormal(const KamataEngine::Vector3& v, const KamataEngine::Matrix4x4& m);
+
+// 逆行列
+// 逆行列
+KamataEngine::Matrix4x4 Inverse(const KamataEngine::Matrix4x4& m);

@@ -22,12 +22,14 @@ KamataEngine::Vector3 Enemy::GetWorldPosition() {
 	return worldPos;
 }
 
-void Enemy::Initialize(KamataEngine::Model* model, uint32_t textureHandle) {
+void Enemy::Initialize(KamataEngine::Model* model, uint32_t textureHandle, const Vector3& position) {
 	// NULLポインタチェック
 	assert(model);
 
 	model_ = model;
 	textureHandle_ = textureHandle;
+	//初期位置
+	worldTransform_.translation_ = position;
 	// ワールド変換の初期化
 	worldTransform_.Initialize();
 }

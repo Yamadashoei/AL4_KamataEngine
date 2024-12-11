@@ -23,7 +23,7 @@ Vector3 Player::GetWorldPosition() {
 	return worldPos;
 }
 
-void Player::Initialize(KamataEngine::Model* model, uint32_t textureHandle) {
+void Player::Initialize(KamataEngine::Model* model, uint32_t textureHandle, const Vector3& position) {
 	// NULLポインタチェック
 	assert(model);
 
@@ -31,6 +31,8 @@ void Player::Initialize(KamataEngine::Model* model, uint32_t textureHandle) {
 	textureHandle_ = textureHandle;
 	// ワールド変換の初期化
 	worldTransform_.Initialize();
+	// 初期位置
+	worldTransform_.translation_ = position;
 	// シングルトンインスタンスを取得する
 	input_ = KamataEngine::Input::GetInstance();
 }
@@ -128,6 +130,11 @@ void Player::Attack() {
 		// 弾を登録する
 		bullets_.push_back(newBullet);
 	}
+}
+
+void Player::SetParent(const KamataEngine::WorldTransform* parent) {
+	// 親関係を結ぶ
+	worldTransform_.parent_ = parent;
 }
 
 void Player::OnCollision() {}
