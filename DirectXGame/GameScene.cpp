@@ -71,6 +71,8 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+	// レールカメラ
+	railCamera_->Update();
 	// 自キャラの更新
 	player_->Update();
 	// 敵キャラの更新
@@ -80,8 +82,7 @@ void GameScene::Update() {
 	CheckAllCollisions();
 	// スカイドームの更新
 	skyDome_->Update();
-	// レールカメラ
-	railCamera_->Update();
+	
 
 	// デバッグカメラの切り替え処理
 #ifdef _DEBUG

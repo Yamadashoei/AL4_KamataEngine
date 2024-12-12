@@ -5,6 +5,9 @@
 #include <math\Vector3.h>
 
 //
+// 行列操作関連の関数
+//
+
 // 2つの行列を掛け算する関数（行列同士の積）
 KamataEngine::Matrix4x4 Multiply(KamataEngine::Matrix4x4 matrix1, KamataEngine::Matrix4x4 matrix2);
 
@@ -40,6 +43,24 @@ KamataEngine::Matrix4x4 MakeAffineMatrix(const KamataEngine::Vector3& scale, con
 // translate: プレイヤーの平行移動ベクトル
 KamataEngine::Matrix4x4 PlayerAffineMatrix(const KamataEngine::Vector3& scale, const KamataEngine::Vector3& rotate, const KamataEngine::Vector3& translate);
 
+// ベクトルに行列を掛けて変換する関数
+// vector: 変換するベクトル
+// matrix: 変換行列
+KamataEngine::Vector3 Transform(const KamataEngine::Vector3& vector, const KamataEngine::Matrix4x4& matrix);
+
+// 法線ベクトルの変換
+// v : 法線ベクトル
+// m : 4x4の変換行列
+KamataEngine::Vector3 TransformNormal(const KamataEngine::Vector3& v, const KamataEngine::Matrix4x4& m);
+
+// 逆行列を計算する関数
+// m: 元の行列
+KamataEngine::Matrix4x4 Inverse(const KamataEngine::Matrix4x4& m);
+
+//
+// ベクトル演算関連の関数
+//
+
 // EaseInOut補間関数
 // x1: 始点の値
 // x2: 終点の値
@@ -58,59 +79,24 @@ float Lerp(float x1, float x2, float t);
 // t: 補間係数（0.0〜1.0）
 KamataEngine::Vector3 Lerp(const KamataEngine::Vector3& v1, const KamataEngine::Vector3& v2, float t);
 
-// Vector3同士の足し算の演算子オーバーロード
-// lhs: 左辺のベクトル
-// rhv: 右辺のベクトル
+// Vector3同士の演算子オーバーロード
+
+// 足し算
 KamataEngine::Vector3& operator+=(KamataEngine::Vector3& lhs, const KamataEngine::Vector3& rhv);
-
-// Vector3同士の引き算の演算子オーバーロード
-// lhs: 左辺のベクトル
-// rhv: 右辺のベクトル
-KamataEngine::Vector3& operator-=(KamataEngine::Vector3& lhv, const KamataEngine::Vector3& rhv);
-
-KamataEngine::Vector3& operator*=(KamataEngine::Vector3& lhs, const KamataEngine::Vector3& rhv);
-
-KamataEngine::Matrix4x4& operator*=(KamataEngine::Matrix4x4& hls, const KamataEngine::Matrix4x4& rhv);
-
-// Vector3同士の足し算
-// v1: 左辺のベクトル
-// v2: 右辺のベクトル
 const KamataEngine::Vector3 operator+(const KamataEngine::Vector3& v1, const KamataEngine::Vector3& v2);
 
-// Vector3同士の引き算
-// v1: 左辺のベクトル
-// v2: 右辺のベクトル
+// 引き算
+KamataEngine::Vector3& operator-=(KamataEngine::Vector3& lhs, const KamataEngine::Vector3& rhv);
 const KamataEngine::Vector3 operator-(const KamataEngine::Vector3& v1, const KamataEngine::Vector3& v2);
 
-// Vector3のスカラー掛け算の演算子オーバーロード
-// v: ベクトル
-// s: スカラー（倍する値）
+// 掛け算（ベクトル同士）
+KamataEngine::Vector3& operator*=(KamataEngine::Vector3& lhs, const KamataEngine::Vector3& rhv);
+
+// スカラー掛け算
 KamataEngine::Vector3& operator*=(KamataEngine::Vector3 v, float s);
-
-// Vector3のスカラー割り算の演算子オーバーロード
-// v: ベクトル
-// s: スカラー（倍する値）
-
-
-// Vector3のスカラー掛け算
-// v: ベクトル
-// s: スカラー（倍する値）
 const KamataEngine::Vector3 operator*(const KamataEngine::Vector3& v, float s);
 
-// Vector3のスカラー割り算
-// v: ベクトル
-// s: スカラー（倍する値）
+// スカラー割り算（未実装）
 
-// ベクトルに行列を掛けて変換する関数
-// vector: 変換するベクトル
-// matrix: 変換行列
-KamataEngine::Vector3 Transform(const KamataEngine::Vector3& vector, const KamataEngine::Matrix4x4& matrix);
-
-// 法線ベクトルの変換
-// v :法線ベクトル
-// m :4x4の変換行列
-KamataEngine::Vector3 TransformNormal(const KamataEngine::Vector3& v, const KamataEngine::Matrix4x4& m);
-
-// 逆行列
-// 逆行列
-KamataEngine::Matrix4x4 Inverse(const KamataEngine::Matrix4x4& m);
+// 行列同士の掛け算
+KamataEngine::Matrix4x4& operator*=(KamataEngine::Matrix4x4& lhs, const KamataEngine::Matrix4x4& rhv);
