@@ -40,7 +40,7 @@ void GameScene::Initialize() {
 	// 自キャラの生成
 	player_ = new Player();
 	// 自キャラの初期化
-	player_->Initialize(model_, textureHandle_, Vector3{-4.0f, -4.0f, 0.0f});
+	player_->Initialize(model_, textureHandle_, Vector3{-4.0f, -4.0f, 20.0f});
 
 	// レールカメラ
 	railCamera_ = new RailCamera();
@@ -52,9 +52,9 @@ void GameScene::Initialize() {
 	enemy_ = new Enemy();
 	// 敵キャラの初期化
 	enemy_->Initialize(modelEnemy_, textureHandleEnemy_, Vector3{6.0f, 3.0f, 10.0f});
-
 	// 敵キャラに自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_);
+
 	// デバッグカメラの生成
 	debugCamera_ = new KamataEngine::DebugCamera(KamataEngine::WinApp::kWindowWidth, KamataEngine::WinApp::kWindowHeight);
 
@@ -71,17 +71,18 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
-	// レールカメラ
-	railCamera_->Update();
+
 	// 自キャラの更新
 	player_->Update();
+	// レールカメラ
+	railCamera_->Update();
 	// 敵キャラの更新
 	enemy_->Update();
-	// デバッグカメラの更新
-	debugCamera_->Update();
-	CheckAllCollisions();
 	// スカイドームの更新
 	skyDome_->Update();
+	// デバッグカメラの更新
+	//debugCamera_->Update();
+	CheckAllCollisions();
 	
 
 	// デバッグカメラの切り替え処理
@@ -104,7 +105,7 @@ void GameScene::Update() {
 	}
 
 	viewProjection_.matView = railCamera_->GetCamera().matView;
-	viewProjection_.matProjection = railCamera_->GetCamera().matProjection;
+	//viewProjection_.matProjection = railCamera_->GetCamera().matProjection;
 	viewProjection_.TransferMatrix();
 }
 
