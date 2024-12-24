@@ -34,7 +34,7 @@ void Enemy::Initialize(KamataEngine::Model* model, uint32_t textureHandle) {
 
 void Enemy::Update() {
 
-	// デスフラグの立った弾を削除
+	// 死亡した弾を削除
 	bullets_.remove_if([](EnemyBullet* bullet) {
 		if (bullet->IsDead()) {
 			delete bullet;
@@ -43,17 +43,26 @@ void Enemy::Update() {
 		return false;
 	});
 
-	// キャラクターの移動ベクトル
-	KamataEngine::Vector3 move = {0.0f, 0.0f, 0.02f};
+	// プレイヤーの位置を取得
+	KamataEngine::Vector3 playerWorldPos = player_->GetWorldPosition();
+	KamataEngine::Vector3 enemyWorldPos = GetWorldPosition();
 
-	// キャラクターの移動速さ
+	// プレイヤーへの移動方向ベクトルを計算
+	KamataEngine::Vector3 direction = playerWorldPos - enemyWorldPos;
+
+	// 方向ベクトルを正規化（単位ベクトルにする）
+	direction = KamataEngine::MathUtility::Normalize(direction);
+
+	// 移動速度を設定
 	const float kCharacterSpeed = 0.2f;
 
-	move.x -= kCharacterSpeed;
+	// 方向ベクトルに移動速度を掛けて移動ベクトルを求める
+	KamataEngine::Vector3 move = direction * kCharacterSpeed;
 
-	// アフィン変換行列の作成
-	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+	// 移動を適用
+	worldTransform_.translation_ += move;
 
+	// 移動範囲を制限（X軸とY軸）
 	const float kMoveLimitX = 34;
 	const float kMoveLimitY = 18;
 
@@ -62,31 +71,28 @@ void Enemy::Update() {
 	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
 
-	// 行列を定数バッファに転送
+	// 行列を更新
+	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 	worldTransform_.TransferMatrix();
 
-	// 弾を発射
-	// Fire();
+	// 弾を発射する処理（Approachメソッドを呼ぶ）
 	Approach();
 
-	// 弾更新
+	// 弾の更新
 	for (EnemyBullet* bullet : bullets_) {
 		bullet->Update();
 	}
 
-	// フェーズ処理
+	// フェーズに基づく動作（必要なら）
 	switch (phase_) {
 	case Phase::Approach:
 	default:
-		// 移動（ベクトルを加算）
 		worldTransform_.translation_ += ApproachVelocity;
-		// 既定の位置に到達したら離脱
 		if (worldTransform_.translation_.z < 0.0f) {
 			phase_ = Phase::Leave;
 		}
 		break;
 	case Phase::Leave:
-		// 移動（ベクトルを加算）
 		worldTransform_.translation_ += LeaveVelocity;
 		break;
 	}
