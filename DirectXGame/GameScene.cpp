@@ -4,8 +4,10 @@
 #include <3d\PrimitiveDrawer.h>
 #include <base\TextureManager.h>
 #include <cassert>
+#include <chrono> // 追加: 時間管理用ライブラリ
+#include <iostream>
 
-GameScene::GameScene() {}
+GameScene::GameScene() : gameOver_(false) {}
 
 GameScene::~GameScene() {
 	delete model_;
@@ -18,7 +20,6 @@ GameScene::~GameScene() {
 }
 
 void GameScene::Initialize() {
-
 	dxCommon_ = KamataEngine::DirectXCommon::GetInstance();
 	input_ = KamataEngine::Input::GetInstance();
 	audio_ = KamataEngine::Audio::GetInstance();
@@ -62,9 +63,30 @@ void GameScene::Initialize() {
 	KamataEngine::AxisIndicator::GetInstance()->SetVisible(true);
 	// 軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
 	KamataEngine::AxisIndicator::GetInstance()->SetTargetCamera(&viewProjection_);
+
+	// ゲーム開始時刻を記録
+	startTime_ = std::chrono::steady_clock::now();
 }
 
 void GameScene::Update() {
+	if (gameOver_) {
+		// ゲームが終了している場合、処理を終了
+		return;
+	}
+
+	// 現在の時間を取得
+	auto currentTime = std::chrono::steady_clock::now();
+	// ゲーム開始時刻からの経過時間（秒）を計算
+	std::chrono::duration<float> elapsed = currentTime - startTime_;
+
+	// 30秒経過した場合、ゲーム終了
+	if (elapsed.count() >= 30.0f) {
+		gameOver_ = true;
+		// ゲーム終了のための処理（例えば、エンディング画面に移行など）
+		std::cout << "ゲームオーバー！30秒経過しました。" << std::endl;
+		return; // ゲーム終了後は処理を続行しない
+	}
+
 	// 自キャラの更新
 	player_->Update();
 	// 敵キャラの更新
@@ -230,13 +252,3 @@ void GameScene::CheckAllCollisions() {
 	}
 #pragma endregion
 }
-
-// void GameScene::AddPlayerBullet(PlayerBullet* playerBullet) {
-//	// リストに登録する
-//	playerBullets_.push_back(playerBullet);
-// }
-//
-// void GameScene::AddEnemyBullet(EnemyBullet* enemyBullet) {
-//	// リストに登録する
-//	enemyBullets_.push_back(enemyBullet);
-// }

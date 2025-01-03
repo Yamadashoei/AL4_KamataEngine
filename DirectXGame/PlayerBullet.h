@@ -1,12 +1,12 @@
 #pragma once
+#include "kMath.h"
 #include <3d\Camera.h>
 #include <3d\Model.h>
 #include <3d\WorldTransform.h>
-#include <math\Vector3.h>
 #include <base\TextureManager.h>
-#include <input\Input.h>
 #include <cassert>
-#include "kMath.h"
+#include <input\Input.h>
+#include <math\Vector3.h>
 
 using namespace KamataEngine;
 
@@ -27,12 +27,17 @@ public:
 	/// </summary>
 	void Draw(const KamataEngine::Camera& viewProjection);
 
-	//デスフラグ getter
+	// デスフラグ getter
 	bool IsDead() const { return isDead_; }
+
 	// 衝突を検出したら呼び出されるコールバック関数
 	void OnCollision();
+
 	// ワールド座標を取得
 	KamataEngine::Vector3 GetWorldPosition();
+
+	// ダメージを取得
+	int GetDamage() const { return damage_; }
 
 private:
 	// ワールドトランスフォーム
@@ -41,13 +46,15 @@ private:
 	KamataEngine::Model* model_ = nullptr;
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
-	//速度
+	// 速度
 	KamataEngine::Vector3 velocity_;
-	//寿命<frm>
+	// 寿命 <frm>
 	static const int32_t kLifeTime = 60 * 5;
-	//デスタイマー
+	// デスタイマー
 	int32_t deathTimer_ = kLifeTime;
-	//デスフラグ
+	// デスフラグ
 	bool isDead_ = false;
 
+	// ダメージ値
+	int damage_ = 10;
 };

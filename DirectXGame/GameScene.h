@@ -15,6 +15,8 @@
 #include <base\DirectXCommon.h>
 #include <input\Input.h>
 
+#include <chrono> // 時間管理用に追加
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -71,6 +73,12 @@ public: // メンバ関数
 	KamataEngine::WorldTransform worldTransform_;
 	// ビュープロジェクション
 	KamataEngine::Camera viewProjection_;
+
+// 追加部分（時間管理）
+private:
+	std::chrono::steady_clock::time_point startTime_; // ゲーム開始時刻
+	bool gameOver_ = false; // ゲーム終了フラグ
+
 
 private: // メンバ変数
 	KamataEngine::DirectXCommon* dxCommon_ = nullptr;

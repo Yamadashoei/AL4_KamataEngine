@@ -79,14 +79,31 @@ void Player::Update() {
 	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
 
-	// 回数速さ[ラジアン/frame]
-	const float kRotSpeed = 0.02f;
-	// 押した方向で移動ベクトルを変更
+	//// 回数速さ[ラジアン/frame]
+	//const float kRotSpeed = 0.02f;
+	//// 押した方向で移動ベクトルを変更
+	//if (input_->PushKey(DIK_A)) {
+	//	worldTransform_.rotation_.y -= kRotSpeed;
+	//} else if (input_->PushKey(DIK_D)) {
+	//	worldTransform_.rotation_.y += kRotSpeed;
+	//}
+	
+
+	//  押した方向で移動ベクトルを変更
+	//赤
 	if (input_->PushKey(DIK_A)) {
-		worldTransform_.rotation_.y -= kRotSpeed;
-	} else if (input_->PushKey(DIK_D)) {
-		worldTransform_.rotation_.y += kRotSpeed;
+		;
+	}  
+	//緑
+	if (input_->PushKey(DIK_W)) {
+		;
 	}
+	//青
+	if (input_->PushKey(DIK_D)) {
+		;
+	}
+
+
 	// キャラクター攻撃処理
 	Attack();
 
