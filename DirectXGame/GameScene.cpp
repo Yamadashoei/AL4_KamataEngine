@@ -4,7 +4,8 @@
 #include <3d\PrimitiveDrawer.h>
 #include <base\TextureManager.h>
 #include <cassert>
-
+#include <chrono>
+#include "TitleScene.h"
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
@@ -13,9 +14,13 @@ GameScene::~GameScene() {
 	delete enemy_;
 	delete debugCamera_;
 
+
+
 	delete modelSkyDome_;
 	delete skyDome_;
 }
+
+std::chrono::steady_clock::time_point previousTime;
 
 void GameScene::Initialize() {
 
@@ -24,9 +29,9 @@ void GameScene::Initialize() {
 	audio_ = KamataEngine::Audio::GetInstance();
 
 	// 自キャラのテクスチャ
-	textureHandle_ = KamataEngine::TextureManager::Load("panda.jpg ");
+	textureHandle_ = KamataEngine::TextureManager::Load("./Resources/Player/player_Blue.png");
 	// 敵キャラのテクスチャ
-	textureHandleEnemy_ = KamataEngine::TextureManager::Load("wasi.jpg ");
+	textureHandleEnemy_ = KamataEngine::TextureManager::Load("./Resources/Enemy/enemy_Red.png");
 
 	// 3Dモデルの生成
 	model_ = KamataEngine::Model::Create();
@@ -46,9 +51,15 @@ void GameScene::Initialize() {
 	enemy_ = new Enemy();
 	// 敵キャラの初期化
 	enemy_->Initialize(modelEnemy_, textureHandleEnemy_);
+	// 敵キャラに初期HPを設定
+	enemy_->hp_ = 100; // HP初期値
 
 	// 敵キャラに自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_);
+
+	// ゲームオーバーフラグの初期化
+	gameOver_ = false;
+
 	// デバッグカメラの生成
 	debugCamera_ = new KamataEngine::DebugCamera(KamataEngine::WinApp::kWindowWidth, KamataEngine::WinApp::kWindowHeight);
 
@@ -62,16 +73,51 @@ void GameScene::Initialize() {
 	KamataEngine::AxisIndicator::GetInstance()->SetVisible(true);
 	// 軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
 	KamataEngine::AxisIndicator::GetInstance()->SetTargetCamera(&viewProjection_);
+
+	// 初期化時に時間の開始点を設定
+	previousTime = std::chrono::steady_clock::now();
 }
 
 void GameScene::Update() {
+	// 現在の時刻を取得
+	auto currentTime = std::chrono::steady_clock::now();
+	// 経過時間を計算（秒単位）
+	std::chrono::duration<float> deltaTime = currentTime - previousTime;
+	previousTime = currentTime;
+
+	// deltaTime.count() によって秒数を取得できます
+	elapsedTime_ += deltaTime.count();
+
+	// 30秒経過したらゲームオーバーフラグを設定
+	if (elapsedTime_ >= 30.0f) {
+		gameOver_ = true;
+	}
+
+	// ゲームオーバーかどうかを確認
+	if (gameOver_) {
+		// ゲームオーバー時の処理
+		// ここで画面遷移や音声再生の処理を追加可能
+		// audio_->PlayWave("game_over.wav");
+		return;
+	}
+
+	// ゲームオーバー前の通常処理
 	// 自キャラの更新
 	player_->Update();
 	// 敵キャラの更新
 	enemy_->Update();
+
+	// 敵キャラのHPが0以下の場合、ゲームオーバーフラグを設定
+	if (enemy_->hp_ <= 0) {
+		gameOver_ = true;
+		return; // 処理を終了
+	}
+
+	// 衝突判定
+	CheckAllCollisions();
+
 	// デバッグカメラの更新
 	debugCamera_->Update();
-	CheckAllCollisions();
 	// スカイドームの更新
 	skyDome_->Update();
 
@@ -81,6 +127,7 @@ void GameScene::Update() {
 		isDebugCameraActive_ = !isDebugCameraActive_;
 	}
 #endif
+
 	// カメラの処理
 	if (isDebugCameraActive_) {
 		// デバッグカメラの更新
@@ -94,6 +141,7 @@ void GameScene::Update() {
 		viewProjection_.UpdateMatrix();
 	}
 }
+
 
 void GameScene::Draw() {
 
@@ -155,7 +203,7 @@ void GameScene::CheckAllCollisions() {
 	// 自弾リストの取得
 	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
 	// 敵弾リストの取得
-	const std::list<EnemyBullet*> enemyBullets = enemy_->GetBullets();
+	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
 
 #pragma region 自キャラと敵弾の当たり判定
 	// 自キャラの座標
@@ -197,6 +245,15 @@ void GameScene::CheckAllCollisions() {
 
 		// 弾と弾の交差
 		if (dist <= len) {
+			enemy_->hp_ -= 5;
+
+			// HPが0以下なら衝突時コールバックを呼び出し、ループを抜ける
+			if (enemy_->hp_ <= 0 && !gameOver_) {
+				gameOver_ = true;
+				enemy_->OnCollision();
+				break;
+			}
+
 			// 敵キャラの衝突コールバックを呼び出す
 			enemy_->OnCollision();
 			// 自弾の衝突コールバックを呼び出す
@@ -230,13 +287,3 @@ void GameScene::CheckAllCollisions() {
 	}
 #pragma endregion
 }
-
-// void GameScene::AddPlayerBullet(PlayerBullet* playerBullet) {
-//	// リストに登録する
-//	playerBullets_.push_back(playerBullet);
-// }
-//
-// void GameScene::AddEnemyBullet(EnemyBullet* enemyBullet) {
-//	// リストに登録する
-//	enemyBullets_.push_back(enemyBullet);
-// }

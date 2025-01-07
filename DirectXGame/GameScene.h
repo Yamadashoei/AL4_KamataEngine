@@ -1,10 +1,11 @@
 #pragma once
 
-#include "Player.h"
 #include "Enemy.h"
-#include "PlayerBullet.h"
 #include "EnemyBullet.h"
+#include "Player.h"
+#include "PlayerBullet.h"
 #include "skydome.h"
+
 
 #include <2d\Sprite.h>
 #include <3d\Camera.h>
@@ -22,7 +23,7 @@ class GameScene {
 
 public: // メンバ関数
 	/// <summary>
-	/// コンストクラタ
+	/// コンストラクタ
 	/// </summary>
 	GameScene();
 
@@ -55,13 +56,13 @@ public: // メンバ関数
 	/// 自弾を追加する
 	/// </summary>
 	/// <param name="playerBullet">自弾</param>
-	//void AddPlayerBullet(PlayerBullet* playerBullet);
+	// void AddPlayerBullet(PlayerBullet* playerBullet);
 
 	/// <summary>
 	/// 敵弾を追加する
 	/// </summary>
 	/// <param name="enemyBullet">敵弾</param>
-	//void AddEnemyBullet(EnemyBullet* enemyBullet);
+	// void AddEnemyBullet(EnemyBullet* enemyBullet);
 
 	// 自キャラ3Dモデル
 	KamataEngine::Model* model_ = nullptr;
@@ -71,6 +72,10 @@ public: // メンバ関数
 	KamataEngine::WorldTransform worldTransform_;
 	// ビュープロジェクション
 	KamataEngine::Camera viewProjection_;
+
+	// デスフラグのgetter
+	bool IsFinished() const { return finished_; }
+
 
 private: // メンバ変数
 	KamataEngine::DirectXCommon* dxCommon_ = nullptr;
@@ -98,5 +103,19 @@ private: // メンバ変数
 	std::list<PlayerBullet*> playerBullets_;
 	// 敵弾
 	std::list<EnemyBullet*> enemyBullets_;
+
+	//シーン終了フラグ
+	bool finished_ = false;
+
+	// 経過時間
+	float elapsedTime_ = 0.0f; // 0秒からスタート
+
+	// ゲームオーバーシーンへの遷移フラグ
+	bool gameOver_ = false;
+
+	// ゲーム終了時間（30秒）
+	float gameOverTime_ = 30.0f;
+
+
 
 };
