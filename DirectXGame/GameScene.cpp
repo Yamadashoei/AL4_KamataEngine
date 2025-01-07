@@ -91,6 +91,7 @@ void GameScene::Update() {
 	// 30秒経過したらゲームオーバーフラグを設定
 	if (elapsedTime_ >= 30.0f) {
 		gameOver_ = true;
+		finished_ = true;
 	}
 
 	// ゲームオーバーかどうかを確認
@@ -110,6 +111,7 @@ void GameScene::Update() {
 	// 敵キャラのHPが0以下の場合、ゲームオーバーフラグを設定
 	if (enemy_->hp_ <= 0) {
 		gameOver_ = true;
+		finished_ = true;
 		return; // 処理を終了
 	}
 
@@ -245,11 +247,13 @@ void GameScene::CheckAllCollisions() {
 
 		// 弾と弾の交差
 		if (dist <= len) {
-			enemy_->hp_ -= 5;
+			enemy_->hp_ -= 10;
 
 			// HPが0以下なら衝突時コールバックを呼び出し、ループを抜ける
 			if (enemy_->hp_ <= 0 && !gameOver_) {
 				gameOver_ = true;
+				finished_ = true;
+
 				enemy_->OnCollision();
 				break;
 			}

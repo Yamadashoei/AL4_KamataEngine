@@ -90,9 +90,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	titleScene = new TitleScene();
 	titleScene->Initialize();
 
-	// ゲームシーンの初期化
-	gameScene = new GameScene();
-	gameScene->Initialize();
+	//// ゲームシーンの初期化
+	//gameScene = new GameScene();
+	//gameScene->Initialize();
 
 	// メインループ
 	while (true) {
@@ -111,7 +111,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		UpdateScene();
 
 		// ゲームシーンの毎フレーム処理
-		gameScene->Update();
+		//gameScene->Update();
 		// 軸表示の更新
 		axisIndicator->Update();
 		// ImGui受付終了
@@ -122,7 +122,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// 現在シーンの描画
 		DrawScene();
 		// ゲームシーンの描画
-		gameScene->Draw();
+		//gameScene->Draw();
 		// 軸表示の描画
 		axisIndicator->Draw();
 		// プリミティブ描画のリセット
