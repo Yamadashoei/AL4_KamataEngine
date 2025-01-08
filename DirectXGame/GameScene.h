@@ -116,6 +116,10 @@ private: // メンバ変数
 	// ゲーム終了時間（30秒）
 	float gameOverTime_ = 30.0f;
 
+	uint32_t soundHandle_ = 0;
+
+	uint32_t voiceHandle_ = 0;
+
 
 
 };

@@ -1,11 +1,11 @@
 #include "GameScene.h"
+#include "TitleScene.h"
 #include <2d\ImGuiManager.h>
 #include <3d\AxisIndicator.h>
 #include <3d\PrimitiveDrawer.h>
 #include <base\TextureManager.h>
 #include <cassert>
 #include <chrono>
-#include "TitleScene.h"
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
@@ -13,8 +13,6 @@ GameScene::~GameScene() {
 	delete player_;
 	delete enemy_;
 	delete debugCamera_;
-
-
 
 	delete modelSkyDome_;
 	delete skyDome_;
@@ -69,6 +67,9 @@ void GameScene::Initialize() {
 	skyDome_ = new skydome();
 	skyDome_->Initialize(modelSkyDome_, textureHandleSkyDome_, &viewProjection_);
 
+	soundHandle_ = audio_->LoadWave("./Resources/sound/game_bgm.mp3");
+	voiceHandle_ = audio_->PlayWave(soundHandle_, true);
+
 	// 軸方向表示の表示を有効にする
 	KamataEngine::AxisIndicator::GetInstance()->SetVisible(true);
 	// 軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
@@ -79,6 +80,31 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+
+	// ゲームオーバー前の通常処理
+	// 自キャラの更新
+	player_->Update();
+	// 敵キャラの更新
+	enemy_->Update();
+
+	// 敵キャラのHPが0以下の場合、ゲームオーバーフラグを設定
+	if (enemy_->hp_ <= 0) {
+		gameOver_ = true;
+		finished_ = true;
+		return; // 処理を終了
+	}
+
+	// 衝突判定
+	CheckAllCollisions();
+if (finished_ == true) {
+		audio_->StopWave(voiceHandle_);
+	}
+
+	// デバッグカメラの更新
+	debugCamera_->Update();
+	// スカイドームの更新
+	skyDome_->Update();
+
 	// 現在の時刻を取得
 	auto currentTime = std::chrono::steady_clock::now();
 	// 経過時間を計算（秒単位）
@@ -102,27 +128,6 @@ void GameScene::Update() {
 		return;
 	}
 
-	// ゲームオーバー前の通常処理
-	// 自キャラの更新
-	player_->Update();
-	// 敵キャラの更新
-	enemy_->Update();
-
-	// 敵キャラのHPが0以下の場合、ゲームオーバーフラグを設定
-	if (enemy_->hp_ <= 0) {
-		gameOver_ = true;
-		finished_ = true;
-		return; // 処理を終了
-	}
-
-	// 衝突判定
-	CheckAllCollisions();
-
-	// デバッグカメラの更新
-	debugCamera_->Update();
-	// スカイドームの更新
-	skyDome_->Update();
-
 	// デバッグカメラの切り替え処理
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_0)) {
@@ -143,7 +148,6 @@ void GameScene::Update() {
 		viewProjection_.UpdateMatrix();
 	}
 }
-
 
 void GameScene::Draw() {
 
