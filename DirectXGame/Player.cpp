@@ -14,6 +14,9 @@ void Player::Initialize(KamataEngine::Model* model, uint32_t textureHandle) {
 	worldTransform_.Initialize();
 	// シングルトンインスタンスを取得する
 	input_ = KamataEngine::Input::GetInstance();
+
+	SetPosition({0.0f, 0.0f, -40.0f});
+
 }
 
 void Player::Update() {
@@ -51,13 +54,27 @@ void Player::Update() {
 	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
 
-	// キャラクターの座標を画面表示する処理
-	ImGui::Begin("playerMove_Debug");
-	ImGui::DragFloat3("x", &worldTransform_.translation_.x, 0.01f);
-	ImGui::End();
+	//// キャラクターの座標を画面表示する処理
+	//ImGui::Begin("playerMove_Debug");
+	//ImGui::DragFloat3("x", &worldTransform_.translation_.x, 0.01f);
+	//ImGui::End();
 }
 
 void Player::Draw(KamataEngine::Camera& viewProjection) {
 	// 3Dモデルを描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+}
+
+void Player::SetPosition(const KamataEngine::Vector3& position) {
+	// プレイヤーのポジションを設定
+	worldTransform_.translation_ = position;
+
+	// アフィン変換の行列の更新
+	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+	worldTransform_.TransferMatrix();
+}
+
+KamataEngine::Vector3 Player::GetPosition() const {
+	// 現在のポジションを取得
+	return worldTransform_.translation_;
 }

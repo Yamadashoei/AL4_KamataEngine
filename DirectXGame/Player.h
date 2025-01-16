@@ -21,6 +21,13 @@ public: // メンバ関数
 	/// </summary>
 	void Draw(KamataEngine::Camera& veiwProjection);
 
+	// プレイヤーの位置を設定
+	void SetPosition(const KamataEngine::Vector3& position);
+
+	// プレイヤーの位置を取得
+	KamataEngine::Vector3 GetPosition() const;
+
+
 private:
 	// ワールドトランスフォーム
 	KamataEngine::WorldTransform worldTransform_;
