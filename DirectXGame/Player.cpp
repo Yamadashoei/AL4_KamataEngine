@@ -101,10 +101,10 @@ void Player::Update() {
 		bullet->Update();
 	}
 
-	// キャラクターの座標を画面表示する処理
-	ImGui::Begin("playerMove_Debug");
-	ImGui::DragFloat3("x", &worldTransform_.translation_.x, 0.01f);
-	ImGui::End();
+	//// キャラクターの座標を画面表示する処理
+	//ImGui::Begin("playerMove_Debug");
+	//ImGui::DragFloat3("x", &worldTransform_.translation_.x, 0.01f);
+	//ImGui::End();
 }
 
 void Player::Draw(KamataEngine::Camera& viewProjection) {

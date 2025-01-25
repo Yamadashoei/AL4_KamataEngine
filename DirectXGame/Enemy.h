@@ -44,6 +44,8 @@ public: // メンバ関数
 	// 接近フェーズ初期化
 	void Approach();
 	void SetPlayer(Player* player) { player_ = player; }
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+
 	// 衝突を検出したら呼び出されるコールバック関数
 	void OnCollision();
 

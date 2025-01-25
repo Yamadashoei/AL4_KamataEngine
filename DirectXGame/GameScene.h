@@ -16,6 +16,8 @@
 #include <base\DirectXCommon.h>
 #include <input\Input.h>
 
+#include <sstream>
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -58,11 +60,12 @@ public: // メンバ関数
 	/// <param name="playerBullet">自弾</param>
 	//void AddPlayerBullet(PlayerBullet* playerBullet);
 
-	/// <summary>
 	/// 敵弾を追加する
-	/// </summary>
-	/// <param name="enemyBullet">敵弾</param>
-	//void AddEnemyBullet(EnemyBullet* enemyBullet);
+	void AddEnemyBullet(EnemyBullet* enemyBullet);
+	//敵発生データの読み込み
+	void LoadEnemyPopData();
+	//敵発生コマンドの更新
+	void UpdateEnemyPopCommands();
 
 	// 自キャラ3Dモデル
 	KamataEngine::Model* model_ = nullptr;
@@ -102,5 +105,7 @@ private: // メンバ変数
 	std::list<PlayerBullet*> playerBullets_;
 	// 敵弾
 	std::list<EnemyBullet*> enemyBullets_;
+
+	std::stringstream enemyPopCommands;
 
 };

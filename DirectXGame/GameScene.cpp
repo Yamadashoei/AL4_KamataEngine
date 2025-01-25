@@ -4,6 +4,7 @@
 #include <3d\PrimitiveDrawer.h>
 #include <base\TextureManager.h>
 #include <cassert>
+#include <fstream>
 
 GameScene::GameScene() {}
 
@@ -52,6 +53,7 @@ void GameScene::Initialize() {
 	enemy_ = new Enemy();
 	// 敵キャラの初期化
 	enemy_->Initialize(modelEnemy_, textureHandleEnemy_, Vector3{6.0f, 3.0f, 10.0f});
+	enemy_->SetGameScene(this);
 
 	// 敵キャラに自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_);
@@ -82,7 +84,6 @@ void GameScene::Update() {
 	CheckAllCollisions();
 	// スカイドームの更新
 	skyDome_->Update();
-	
 
 	// デバッグカメラの切り替え処理
 #ifdef _DEBUG
@@ -244,12 +245,79 @@ void GameScene::CheckAllCollisions() {
 #pragma endregion
 }
 
+void GameScene::AddEnemyBullet(EnemyBullet* enemyBullet) {
+	// リストに登録する
+	enemyBullets_.push_back(enemyBullet);
+}
+
+void GameScene::LoadEnemyPopData() {
+	// ファイルを開く
+	std::ifstream file;
+	file.open(**);
+	assert(file.is_open());
+	// ファイルの内容を文字列ストリームにコピー
+	enemyPopCommands << file.rdbuf();
+	// ファイルを閉じる
+	file.close();
+}
+
+void GameScene::UpdateEnemyPopCommands() {
+	//待機処理
+	if (待機中フラグ) {
+		待機タイマー--;
+		if (待機タイマー <= 0) {
+		//待機完了
+			待機中フラグ = false;
+		}
+		return;
+	}
+
+	// 1行目の文字列を入れる変数
+	std::string line;
+	// コマンド実行ループ
+	while (getline(enemyPopCommands, line)) {
+		// 1行目の文字列をストリームに変換して解析しやすくする
+		std::istringstream line_stream(line);
+		std::string word;
+		//,区切りで行の先頭文字列を取得
+		getline(line_stream, word, ',');
+
+		// "//"から始まる行はコメント
+		if (word.find("//") == 0) {
+			// コメント行を飛ばす
+			continue;
+		}
+
+		// POPコマンド
+		if (word.find("POP") == 0) {
+			// X座標
+			getline(line_stream, word, ',');
+			float x = (float)std::atof(word.c_str());
+			// Y座標
+			getline(line_stream, word, ',');
+			float y = (float)std::atof(word.c_str());
+			// Z座標
+			getline(line_stream, word, ',');
+			float z = (float)std::atof(word.c_str());
+			// 敵を発生させる
+			敵発生(Vector3(x, y, z));
+		}
+		// WAITコマンド
+		else if (word.find("WAIT") == 0) {
+			getline(line_stream, word, ',');
+			// 待ち時間
+			int32_t waitTime = atoi(word.c_str());
+			// 待機開始
+			待機中フラグ = true;
+			待機タイマー = waitTime;
+			// コマンドループを抜ける
+			break;
+		}
+
+	}
+}
+
 // void GameScene::AddPlayerBullet(PlayerBullet* playerBullet) {
 //	// リストに登録する
 //	playerBullets_.push_back(playerBullet);
-// }
-//
-// void GameScene::AddEnemyBullet(EnemyBullet* enemyBullet) {
-//	// リストに登録する
-//	enemyBullets_.push_back(enemyBullet);
 // }
