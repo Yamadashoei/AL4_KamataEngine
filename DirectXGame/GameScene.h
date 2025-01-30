@@ -105,7 +105,12 @@ private: // メンバ変数
 	std::list<PlayerBullet*> playerBullets_;
 	// 敵弾
 	std::list<EnemyBullet*> enemyBullets_;
-
+	//敵発生コマンド
 	std::stringstream enemyPopCommands;
+
+	// 敵発生コマンドの待機
+	bool waitFlag = false;
+	int32_t waitTimer = 0;
+
 
 };

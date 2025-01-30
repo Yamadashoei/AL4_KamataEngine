@@ -253,7 +253,7 @@ void GameScene::AddEnemyBullet(EnemyBullet* enemyBullet) {
 void GameScene::LoadEnemyPopData() {
 	// ファイルを開く
 	std::ifstream file;
-	file.open(**);
+	file.open("./Resources/enemyPop.csv"); // 追加
 	assert(file.is_open());
 	// ファイルの内容を文字列ストリームにコピー
 	enemyPopCommands << file.rdbuf();
@@ -262,12 +262,12 @@ void GameScene::LoadEnemyPopData() {
 }
 
 void GameScene::UpdateEnemyPopCommands() {
-	//待機処理
-	if (待機中フラグ) {
-		待機タイマー--;
-		if (待機タイマー <= 0) {
-		//待機完了
-			待機中フラグ = false;
+	// 待機処理
+	if (waitFlag) {
+		waitTimer--;
+		if (waitTimer <= 0) {
+			// 待機完了
+			waitFlag = false;
 		}
 		return;
 	}
@@ -308,12 +308,11 @@ void GameScene::UpdateEnemyPopCommands() {
 			// 待ち時間
 			int32_t waitTime = atoi(word.c_str());
 			// 待機開始
-			待機中フラグ = true;
-			待機タイマー = waitTime;
+			waitFlag = true;
+			waitTimer = waitTime;
 			// コマンドループを抜ける
 			break;
 		}
-
 	}
 }
 
