@@ -47,6 +47,11 @@ void Player::Update() {
 		}
 		return false;
 	});
+	// 弾更新
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Update();
+	}
+
 
 	// キャラクターの移動ベクトル
 	KamataEngine::Vector3 move = {0.0f, 0.0f, 0.0f};
@@ -95,11 +100,6 @@ void Player::Update() {
 	//worldTransform_.TransferMatrix();
 	// キャラクター攻撃処理
 	Attack();
-
-	// 弾更新
-	for (PlayerBullet* bullet : bullets_) {
-		bullet->Update();
-	}
 
 	//// キャラクターの座標を画面表示する処理
 	//ImGui::Begin("playerMove_Debug");

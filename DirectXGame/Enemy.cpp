@@ -6,10 +6,7 @@
 using namespace KamataEngine;
 
 Enemy::~Enemy() {
-	// bullet解放
-	for (EnemyBullet* bullet : bullets_) {
-		delete bullet;
-	}
+
 }
 
 KamataEngine::Vector3 Enemy::GetWorldPosition() {
@@ -36,14 +33,6 @@ void Enemy::Initialize(KamataEngine::Model* model, uint32_t textureHandle, const
 
 void Enemy::Update() {
 
-	// デスフラグの立った弾を削除
-	bullets_.remove_if([](EnemyBullet* bullet) {
-		if (bullet->IsDead()) {
-			delete bullet;
-			return true;
-		}
-		return false;
-	});
 
 	// キャラクターの移動ベクトル
 	KamataEngine::Vector3 move = {0.0f, 0.0f, 0.02f};
@@ -71,11 +60,6 @@ void Enemy::Update() {
 	// Fire();
 	Approach();
 
-	// 弾更新
-	for (EnemyBullet* bullet : bullets_) {
-		bullet->Update();
-	}
-
 	// フェーズ処理
 	switch (phase_) {
 	case Phase::Approach:
@@ -98,10 +82,7 @@ void Enemy::Draw(KamataEngine::Camera& viewProjection) {
 
 	// 3Dモデルを描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
-	// 弾描画
-	for (EnemyBullet* bullet : bullets_) {
-		bullet->Draw(viewProjection);
-	}
+	
 }
 
 // 発射
@@ -125,8 +106,7 @@ void Enemy::Fire() {
 	// 弾を生成し、初期化
 	EnemyBullet* newBullet = new EnemyBullet();
 	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
-	// 弾を登録する
-	bullets_.push_back(newBullet);
+	
 }
 
 void Enemy::Approach() {

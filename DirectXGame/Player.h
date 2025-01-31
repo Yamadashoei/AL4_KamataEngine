@@ -44,6 +44,7 @@ public: // メンバ関数
 	const KamataEngine::WorldTransform& GetWorldTransform() { return worldTransform_; }
 	// ワールド座標を取得
 	KamataEngine::Vector3 GetWorldPosition();
+
 	// 弾リストを取得
 	const std::list<PlayerBullet*>& GetBullets() const { return bullets_; }
 
@@ -56,6 +57,9 @@ private:
 	uint32_t textureHandle_ = 0u;
 	// キーボード入力
 	KamataEngine::Input* input_ = nullptr;
+
 	// 弾
 	std::list<PlayerBullet*> bullets_;
+
+
 };

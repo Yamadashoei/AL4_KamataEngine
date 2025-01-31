@@ -11,7 +11,13 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 	delete model_;
 	delete player_;
-	delete enemy_;
+	for (Enemy* enemy : enemies_) {
+		delete enemy;
+	}
+	for (EnemyBullet* enemyBullet : enemyBullets_) {
+		delete enemyBullet;
+	}
+
 	delete debugCamera_;
 
 	delete modelSkyDome_;
@@ -50,13 +56,14 @@ void GameScene::Initialize() {
 	player_->SetParent(&railCamera_->GetWorldTransform());
 
 	// 敵キャラの生成
-	enemy_ = new Enemy();
+	// enemy_ = new Enemy();
 	// 敵キャラの初期化
-	enemy_->Initialize(modelEnemy_, textureHandleEnemy_, Vector3{6.0f, 3.0f, 10.0f});
-	enemy_->SetGameScene(this);
+	/*enemy_->Initialize(modelEnemy_, textureHandleEnemy_, Vector3{6.0f, 3.0f, 10.0f});
+	enemy_->SetGameScene(this);*/
 
 	// 敵キャラに自キャラのアドレスを渡す
-	enemy_->SetPlayer(player_);
+	// enemy_->SetPlayer(player_);
+
 	// デバッグカメラの生成
 	debugCamera_ = new KamataEngine::DebugCamera(KamataEngine::WinApp::kWindowWidth, KamataEngine::WinApp::kWindowHeight);
 
@@ -78,7 +85,20 @@ void GameScene::Update() {
 	// 自キャラの更新
 	player_->Update();
 	// 敵キャラの更新
-	enemy_->Update();
+	 enemy_->Update();
+	// デスフラグの立った弾を削除
+	enemyBullets_.remove_if([](EnemyBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+	});
+	for (EnemyBullet* enemyBullet : enemyBullets_) {
+		enemyBullet->Update();
+	}
+
+	UpdateEnemyPopCommands();
 	// デバッグカメラの更新
 	debugCamera_->Update();
 	CheckAllCollisions();
@@ -143,6 +163,10 @@ void GameScene::Draw() {
 	// 敵キャラの描画
 	enemy_->Draw(viewProjection_);
 
+	for (EnemyBullet* enemyBullet : enemyBullets_) {
+		enemyBullet->Draw(viewProjection_);
+	}
+
 	// 3Dオブジェクト描画後処理
 	KamataEngine::Model::PostDraw();
 #pragma endregion
@@ -165,11 +189,10 @@ void GameScene::Draw() {
 void GameScene::CheckAllCollisions() {
 	// 判定対象AとBの座標
 	Vector3 posA, posB;
-
 	// 自弾リストの取得
 	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
 	// 敵弾リストの取得
-	const std::list<EnemyBullet*> enemyBullets = enemy_->GetBullets();
+	const std::list<EnemyBullet*> enemyBullets = GetEnemyBullets();
 
 #pragma region 自キャラと敵弾の当たり判定
 	// 自キャラの座標
@@ -299,8 +322,14 @@ void GameScene::UpdateEnemyPopCommands() {
 			// Z座標
 			getline(line_stream, word, ',');
 			float z = (float)std::atof(word.c_str());
+
 			// 敵を発生させる
-			敵発生(Vector3(x, y, z));
+			enemy_ = new Enemy();
+			enemy_->SetPlayer(player_);
+			enemy_->Initialize(modelEnemy_, textureHandleEnemy_, Vector3{x, y, z});
+			enemy_->SetGameScene(this);
+			enemies_.push_back(enemy_);
+
 		}
 		// WAITコマンド
 		else if (word.find("WAIT") == 0) {

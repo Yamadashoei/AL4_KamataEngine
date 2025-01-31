@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Player.h"
 #include "Enemy.h"
-#include "PlayerBullet.h"
 #include "EnemyBullet.h"
-#include "skydome.h"
+#include "Player.h"
+#include "PlayerBullet.h"
 #include "RailCamera.h"
+#include "skydome.h"
 
 #include <2d\Sprite.h>
 #include <3d\Camera.h>
@@ -58,13 +58,13 @@ public: // メンバ関数
 	/// 自弾を追加する
 	/// </summary>
 	/// <param name="playerBullet">自弾</param>
-	//void AddPlayerBullet(PlayerBullet* playerBullet);
+	// void AddPlayerBullet(PlayerBullet* playerBullet);
 
 	/// 敵弾を追加する
 	void AddEnemyBullet(EnemyBullet* enemyBullet);
-	//敵発生データの読み込み
+	// 敵発生データの読み込み
 	void LoadEnemyPopData();
-	//敵発生コマンドの更新
+	// 敵発生コマンドの更新
 	void UpdateEnemyPopCommands();
 
 	// 自キャラ3Dモデル
@@ -105,12 +105,14 @@ private: // メンバ変数
 	std::list<PlayerBullet*> playerBullets_;
 	// 敵弾
 	std::list<EnemyBullet*> enemyBullets_;
-	//敵発生コマンド
+	// 敵発生コマンド
 	std::stringstream enemyPopCommands;
 
 	// 敵発生コマンドの待機
 	bool waitFlag = false;
 	int32_t waitTimer = 0;
 
-
+	std::list<Enemy*> enemies_;
+	// 弾リストを取得
+	const std::list<EnemyBullet*>& GetEnemyBullets() const { return enemyBullets_; }
 };

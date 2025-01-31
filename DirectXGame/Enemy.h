@@ -51,8 +51,6 @@ public: // メンバ関数
 
 	KamataEngine::Vector3 GetWorldPosition();
 	// 弾リストを取得
-	const std::list<EnemyBullet*>& GetBullets() const { return bullets_; }
-
 
 
 private:
@@ -66,8 +64,7 @@ private:
 	Phase phase_ = Phase::Approach;
 	KamataEngine::Vector3 ApproachVelocity = {0.0f, 0.0f, -0.02f};
 	KamataEngine::Vector3 LeaveVelocity = {-0.1f, 0.05f, 0.02f};
-	// 弾
-	std::list<EnemyBullet*> bullets_;
+
 	// 発射タイマー
 	int32_t fireTimer = 0;
 	//ゲームシーン
