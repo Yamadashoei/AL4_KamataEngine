@@ -15,6 +15,7 @@ GameScene::~GameScene() {
 
 	delete modelSkyDome_;
 	delete skyDome_;
+	delete railCamera_;
 }
 
 void GameScene::Initialize() {
@@ -40,7 +41,7 @@ void GameScene::Initialize() {
 	// 自キャラの生成
 	player_ = new Player();
 	// 自キャラの初期化
-	player_->Initialize(model_, textureHandle_, Vector3{-4.0f, -4.0f, 0.0f});
+	player_->Initialize(model_, textureHandle_, Vector3{0.0f, 0.0f, 20.0f});
 
 	// レールカメラ
 	railCamera_ = new RailCamera();
