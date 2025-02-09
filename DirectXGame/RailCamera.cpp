@@ -7,8 +7,11 @@ void RailCamera::Initialize(const WorldTransform& worldTransform) {
 	// ワールドトランスフォームの初期化
 	worldTransform_.matWorld_ = worldTransform.matWorld_;
 	worldTransform_.rotation_ = worldTransform.rotation_;
+	worldTransform_.Initialize();
 	// カメラの初期化
 	viewProjection_.Initialize();
+	viewProjection_.farZ = 400.0f;
+
 }
 
 void RailCamera::Update() {
