@@ -7,6 +7,10 @@ void RailCamera::Initialize(const WorldTransform& worldTransform) {
 	// ワールドトランスフォームの初期化
 	worldTransform_.matWorld_ = worldTransform.matWorld_;
 	worldTransform_.rotation_ = worldTransform.rotation_;
+
+	worldTransform_.translation_ = {0.0f, 0.0f, 0.0f}; // 位置を初期化
+	// 引数で回転角（ラジアン）を受け取ってワールドトランスフォームに設定
+	worldTransform_.rotation_ = {0.0f, 0.0f, 0.0f}; // 回転を初期化
 	// カメラの初期化
 	viewProjection_.Initialize();
 }

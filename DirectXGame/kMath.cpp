@@ -124,11 +124,21 @@ KamataEngine::Matrix4x4 MakeRotateZMatrix(float radian) {
 // translation: 平行移動ベクトル
 KamataEngine::Matrix4x4 MakeAffineMatrix(const KamataEngine::Vector3& scale, const KamataEngine::Vector3& rotate, const KamataEngine::Vector3& translation) {
 	KamataEngine::Matrix4x4 ans;
-	// スケール行列
-	// Matrix4x4 ScallMat = {scale.x, 0, 0, 0, 0, scale.y, 0, 0, 0, 0, scale.z, 0, 0, 0, 1};
-	// 拡大＊回転＊平行移動でワールド変換行列に
-	ans = Multiply(Multiply(MakeScaleMatrix(scale), Multiply(Multiply(MakeRotateXMatrix(rotate.x), MakeRotateYMatrix(rotate.y)), MakeRotateZMatrix(rotate.z))), MakeTranslateMatrix(translation));
-	return ans;
+	KamataEngine::Matrix4x4 matScale = MakeScaleMatrix(scale);
+
+KamataEngine::Matrix4x4 matRotateX = MakeRotateXMatrix(rotate.x);
+KamataEngine::Matrix4x4 matRotateY = MakeRotateYMatrix(rotate.y);
+KamataEngine::Matrix4x4 matRotateZ = MakeRotateZMatrix(rotate.z);
+
+KamataEngine::Matrix4x4 matRotateXY = Multiply(matRotateX, matRotateY);
+KamataEngine::Matrix4x4 matRotateXYZ = Multiply(matRotateXY, MakeRotateZMatrix(rotate.z));
+
+KamataEngine::Matrix4x4 matRotateScale = Multiply(matScale, matRotateXYZ);
+KamataEngine::Matrix4x4 matTranslate = MakeTranslateMatrix(translation);
+
+ans = Multiply(matRotateScale, matTranslate);
+return ans;
+
 }
 
 // プレイヤー専用のアフィン変換行列を作成する関数

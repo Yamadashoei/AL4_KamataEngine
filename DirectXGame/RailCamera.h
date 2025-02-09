@@ -3,6 +3,7 @@
 #include "3d/WorldTransform.h"
 #include "kMath.h"
 #include "math/MathUtility.h"
+class GameScene;
 
 class RailCamera {
 public:
@@ -17,8 +18,10 @@ public:
 
 	KamataEngine::Camera& GetCamera() { return viewProjection_; }
 
-	const KamataEngine::WorldTransform& GetWorldTransform() {
-		return worldTransform_; }
+	const KamataEngine::WorldTransform& GetWorldTransform() { return worldTransform_; }
+
+	//void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+
 
 private:
 	// ワールド変換データ
@@ -29,4 +32,7 @@ private:
 	KamataEngine::Vector3 translation_ = {0.0f, 0.0f, 0.0f};
 
 	KamataEngine::Vector3 rotation_ = {0.0f, 0.0f, 0.0f};
+
+	//GameScene* gameScene_ = nullptr;
+
 };

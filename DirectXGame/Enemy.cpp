@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "kMath.h"
 #include <cassert>
+#include "GameScene.h"
 
 using namespace KamataEngine;
 
@@ -29,6 +30,8 @@ void Enemy::Initialize(KamataEngine::Model* model, uint32_t textureHandle, const
 	worldTransform_.translation_ = position;
 	// ワールド変換の初期化
 	worldTransform_.Initialize();
+
+
 }
 
 void Enemy::Update() {
@@ -106,6 +109,9 @@ void Enemy::Fire() {
 	// 弾を生成し、初期化
 	EnemyBullet* newBullet = new EnemyBullet();
 	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
+	//弾を登録する
+	gameScene_->AddEnemyBullet(newBullet);
+
 	
 }
 

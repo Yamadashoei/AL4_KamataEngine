@@ -80,6 +80,7 @@ private: // メンバ変数
 	KamataEngine::DirectXCommon* dxCommon_ = nullptr;
 	KamataEngine::Input* input_ = nullptr;
 	KamataEngine::Audio* audio_ = nullptr;
+
 	// 自キャラのテクスチャハンドル
 	uint32_t textureHandle_ = 0;
 	// 敵キャラのテクスチャハンドル
@@ -87,7 +88,8 @@ private: // メンバ変数
 	// 自キャラ
 	Player* player_ = nullptr;
 	// 敵キャラ
-	Enemy* enemy_ = nullptr;
+	//Enemy* enemy_ = nullptr;
+	
 	// 天球
 	skydome* skyDome_ = nullptr;
 	KamataEngine::Model* modelSkyDome_ = nullptr;
@@ -115,4 +117,6 @@ private: // メンバ変数
 	std::list<Enemy*> enemies_;
 	// 弾リストを取得
 	const std::list<EnemyBullet*>& GetEnemyBullets() const { return enemyBullets_; }
+
+
 };

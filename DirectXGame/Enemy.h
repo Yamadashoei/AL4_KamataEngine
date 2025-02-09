@@ -60,6 +60,7 @@ private:
 	KamataEngine::Model* model_ = nullptr;
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
+
 	// フェーズ
 	Phase phase_ = Phase::Approach;
 	KamataEngine::Vector3 ApproachVelocity = {0.0f, 0.0f, -0.02f};

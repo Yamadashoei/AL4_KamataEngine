@@ -1,3 +1,4 @@
+#pragma once
 #include "PlayerBullet.h"
 #include <3d\Camera.h>
 #include <3d\Model.h>

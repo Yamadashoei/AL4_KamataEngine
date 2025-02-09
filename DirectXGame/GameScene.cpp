@@ -46,14 +46,16 @@ void GameScene::Initialize() {
 
 	// 自キャラの生成
 	player_ = new Player();
+	Vector3 playerPosition(0.0f, 0.0f, 20.0f);
 	// 自キャラの初期化
-	player_->Initialize(model_, textureHandle_, Vector3{-4.0f, -4.0f, 0.0f});
+	player_->Initialize(model_, textureHandle_, playerPosition);
 
 	// レールカメラ
 	railCamera_ = new RailCamera();
 	railCamera_->Initialize(player_->GetWorldTransform());
+	//railCamera_->SetGameScene(this);
 	// 自キャラとレールカメラの親子関係を結ぶ
-	player_->SetParent(&railCamera_->GetWorldTransform());
+	//player_->SetParent(&railCamera_->GetWorldTransform());
 
 	// 敵キャラの生成
 	// enemy_ = new Enemy();
@@ -63,6 +65,19 @@ void GameScene::Initialize() {
 
 	// 敵キャラに自キャラのアドレスを渡す
 	// enemy_->SetPlayer(player_);
+
+	//// デスフラグの立った弾を削除
+	// enemyBullets_.remove_if([](EnemyBullet* bullet) {
+	//	if (bullet->IsDead()) {
+	//		delete bullet;
+	//		return true;
+	//	}
+	//	return false;
+	// });
+	// for (EnemyBullet* enemyBullet : enemyBullets_) {
+	//	enemyBullet->Update();
+	// }
+	LoadEnemyPopData();
 
 	// デバッグカメラの生成
 	debugCamera_ = new KamataEngine::DebugCamera(KamataEngine::WinApp::kWindowWidth, KamataEngine::WinApp::kWindowHeight);
@@ -77,15 +92,23 @@ void GameScene::Initialize() {
 	KamataEngine::AxisIndicator::GetInstance()->SetVisible(true);
 	// 軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
 	KamataEngine::AxisIndicator::GetInstance()->SetTargetCamera(&viewProjection_);
+
+	UpdateEnemyPopCommands();
 }
 
 void GameScene::Update() {
+
+	UpdateEnemyPopCommands();
+
 	// レールカメラ
 	railCamera_->Update();
 	// 自キャラの更新
 	player_->Update();
 	// 敵キャラの更新
-	 enemy_->Update();
+	for (Enemy* enemy : enemies_) {
+		enemy->Update();
+	}
+
 	// デスフラグの立った弾を削除
 	enemyBullets_.remove_if([](EnemyBullet* bullet) {
 		if (bullet->IsDead()) {
@@ -98,7 +121,6 @@ void GameScene::Update() {
 		enemyBullet->Update();
 	}
 
-	UpdateEnemyPopCommands();
 	// デバッグカメラの更新
 	debugCamera_->Update();
 	CheckAllCollisions();
@@ -161,7 +183,10 @@ void GameScene::Draw() {
 	// 自キャラの描画
 	player_->Draw(viewProjection_);
 	// 敵キャラの描画
-	enemy_->Draw(viewProjection_);
+	// enemy_->Draw(viewProjection_);
+	for (Enemy* enemy : enemies_) {
+		enemy->Draw(viewProjection_);
+	}
 
 	for (EnemyBullet* enemyBullet : enemyBullets_) {
 		enemyBullet->Draw(viewProjection_);
@@ -218,26 +243,28 @@ void GameScene::CheckAllCollisions() {
 #pragma endregion
 
 #pragma region 自弾と敵キャラの当たり判定
-	// 敵キャラの座標
-	posA = enemy_->GetWorldPosition();
+	for (Enemy* enemy : enemies_) {
+		// 敵キャラの座標
+		posA = enemy->GetWorldPosition();
 
-	// 敵キャラと自弾全ての当たり判定
-	for (PlayerBullet* bullet : playerBullets) {
-		// 自弾の座標
-		posB = bullet->GetWorldPosition();
+		// 敵キャラと自弾全ての当たり判定
+		for (PlayerBullet* bullet : playerBullets) {
+			// 自弾の座標
+			posB = bullet->GetWorldPosition();
 
-		// 座標AとBの距離を求める
-		// 自キャラと敵弾の距離の二乗を求める
-		float dist = pow((posB.x - posA.x), 2.0f) + pow((posB.y - posA.y), 2.0f) + pow((posB.z - posA.z), 2.0f);
-		// 衝突判定距離の二乗
-		float len = pow((1.0f + 1.0f), 2.0f);
+			// 座標AとBの距離を求める
+			// 自キャラと敵弾の距離の二乗を求める
+			float dist = pow((posB.x - posA.x), 2.0f) + pow((posB.y - posA.y), 2.0f) + pow((posB.z - posA.z), 2.0f);
+			// 衝突判定距離の二乗
+			float len = pow((1.0f + 1.0f), 2.0f);
 
-		// 弾と弾の交差
-		if (dist <= len) {
-			// 敵キャラの衝突コールバックを呼び出す
-			enemy_->OnCollision();
-			// 自弾の衝突コールバックを呼び出す
-			bullet->OnCollision();
+			// 弾と弾の交差
+			if (dist <= len) {
+				// 敵キャラの衝突コールバックを呼び出す
+				enemy->OnCollision();
+				// 自弾の衝突コールバックを呼び出す
+				bullet->OnCollision();
+			}
 		}
 	}
 #pragma endregion
@@ -324,11 +351,11 @@ void GameScene::UpdateEnemyPopCommands() {
 			float z = (float)std::atof(word.c_str());
 
 			// 敵を発生させる
-			enemy_ = new Enemy();
-			enemy_->SetPlayer(player_);
-			enemy_->Initialize(modelEnemy_, textureHandleEnemy_, Vector3{x, y, z});
-			enemy_->SetGameScene(this);
-			enemies_.push_back(enemy_);
+			Enemy* enemy = new Enemy();
+			enemy->SetPlayer(player_);
+			enemy->Initialize(modelEnemy_, textureHandleEnemy_, Vector3{x, y, z});
+			enemy->SetGameScene(this);
+			enemies_.push_back(enemy);
 
 		}
 		// WAITコマンド
