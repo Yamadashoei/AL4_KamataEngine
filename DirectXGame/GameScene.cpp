@@ -22,6 +22,7 @@ GameScene::~GameScene() {
 
 	delete modelSkyDome_;
 	delete skyDome_;
+	delete railCamera_;
 }
 
 void GameScene::Initialize() {
@@ -147,7 +148,7 @@ void GameScene::Update() {
 	}
 
 	viewProjection_.matView = railCamera_->GetCamera().matView;
-	viewProjection_.matProjection = railCamera_->GetCamera().matProjection;
+	//viewProjection_.matProjection = railCamera_->GetCamera().matProjection;
 	viewProjection_.TransferMatrix();
 }
 
