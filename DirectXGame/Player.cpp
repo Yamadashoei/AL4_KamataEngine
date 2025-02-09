@@ -71,7 +71,7 @@ void Player::Update() {
 		move.y += kCharacterSpeed;
 	}
 	// 座標移動（ベクトルの加算）
-	worldTransform_.translation_ += move;
+	worldTransform_.translation_ += move; 
 
 
 	// 移動限界の座標
